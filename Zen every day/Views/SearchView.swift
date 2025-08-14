@@ -1,5 +1,6 @@
 import Combine
 import SwiftUI
+import UIKit
 
 struct SearchTopicItem {
   let text: String
@@ -33,36 +34,35 @@ struct SearchTipRow: View {
 
 struct SearchView: View {
   @State private var query: String = ""
-  @State private var results: [Verse] = []
+  @State private var results: [WisdomQuote] = []
   @State private var errorMessage: String?
   @State private var searchWorkItem: DispatchWorkItem?
   @State private var isSearching = false
   @FocusState private var isTextFieldFocused: Bool
 
-  // States for verse sharing
-  @State private var selectedVerseForCard: Verse?
+  // State for quote copying
   @State private var showCopyToast = false
 
   @EnvironmentObject var settings: UserSettings
-  @EnvironmentObject var savedVersesManager: SavedVersesManager
 
-  // Use singleton Bible manager instead of creating a new instance
-  private var bibleManager = BibleManager.shared
+  // Use singleton wisdom manager
+  private var wisdomManager = WisdomManager.shared
 
   // Quick search suggestions - focused on specific words/phrases
   let quickSearches = [
-    SearchTopicItem(text: "eternal life", emoji: "♾️", color: .blue.opacity(0.1), textColor: .blue),
-    SearchTopicItem(text: "blessed", emoji: "✨", color: .yellow.opacity(0.1), textColor: .orange),
-    SearchTopicItem(text: "righteous", emoji: "⚖️", color: .green.opacity(0.1), textColor: .green),
-    SearchTopicItem(text: "glory", emoji: "👑", color: .purple.opacity(0.1), textColor: .purple),
-    SearchTopicItem(text: "kingdom", emoji: "🏰", color: .indigo.opacity(0.1), textColor: .indigo),
-    SearchTopicItem(text: "shepherd", emoji: "🐑", color: .mint.opacity(0.1), textColor: .mint),
+    SearchTopicItem(text: "mindfulness", emoji: "🧘", color: .green.opacity(0.1), textColor: .green),
+    SearchTopicItem(text: "compassion", emoji: "❤️", color: .pink.opacity(0.1), textColor: .pink),
+    SearchTopicItem(text: "impermanence", emoji: "🍃", color: .orange.opacity(0.1), textColor: .orange),
+    SearchTopicItem(text: "wisdom", emoji: "🕯", color: .purple.opacity(0.1), textColor: .purple),
+    SearchTopicItem(text: "suffering", emoji: "😌", color: .blue.opacity(0.1), textColor: .blue),
+    SearchTopicItem(text: "emptiness", emoji: "🌌", color: .indigo.opacity(0.1), textColor: .indigo),
   ]
 
   // Popular phrases that people often search for
   let popularPhrases = [
-    "fear not", "be strong", "good news", "living water", "narrow gate",
-    "bread of life", "vine and branches", "still waters", "green pastures",
+    "noble eightfold path", "four noble truths", "mindful breathing",
+    "loving kindness", "middle way", "right action", "impermanence",
+    "non-self", "bodhisattva",
   ]
 
   var body: some View {
@@ -174,7 +174,7 @@ struct SearchView: View {
         }
 
         // Loading state while wisdom loads
-        if bibleManager.isLoading {
+        if wisdomManager.isLoading {
           VStack(spacing: 16) {
             ProgressView()
               .scaleEffect(1.2)
@@ -333,7 +333,7 @@ struct SearchView: View {
             Image(systemName: "magnifyingglass")
               .font(.system(size: 40))
               .foregroundColor(.secondary)
-            Text("No verses found for \"\(query)\"")
+            Text("No quotes found for \"\(query)\"")
               .foregroundColor(.secondary)
               .font(.system(size: settings.fontSize))
               .multilineTextAlignment(.center)
@@ -363,58 +363,39 @@ struct SearchView: View {
             .padding(.horizontal)
             .padding(.vertical, 8)
 
-            List(results) { verse in
+            List(results, id: \.id) { quote in
               HStack(alignment: .top, spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
-                  Text("\(verse.book_name) \(verse.chapter):\(verse.verse)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-
-                  // Highlighted verse text
+                  // Highlighted quote text
                   HighlightedText(
-                    text: verse.text.cleanVerse,
+                    text: quote.text,
                     searchQuery: query,
                     fontSize: settings.fontSize
                   )
+
+                  if let author = quote.author {
+                    Text(author)
+                      .font(.caption)
+                      .foregroundColor(.secondary)
+                  }
                 }
 
                 Spacer()
 
-                HStack(spacing: 12) {
-                  // Share button
-                  Button(action: {
-                    selectedVerseForCard = verse
-                  }) {
-                    Image(systemName: "square.and.arrow.up")
-                      .font(.system(size: 16))
-                      .foregroundColor(.blue)
+                // Copy button
+                Button(action: {
+                  var copyText = quote.text
+                  if let author = quote.author {
+                    copyText += "\n- \(author)"
                   }
-                  .buttonStyle(PlainButtonStyle())
-
-                  // Copy button
-                  Button(action: {
-                    let copyText = "\(verse.text.cleanVerse)\n\(verse.book_name) \(verse.chapter):\(verse.verse)"
-                    UIPasteboard.general.string = copyText
-                    showCopyToast = true
-                  }) {
-                    Image(systemName: "doc.on.doc")
-                      .font(.system(size: 16))
-                      .foregroundColor(.blue)
-                  }
-                  .buttonStyle(PlainButtonStyle())
-
-                  Button(action: {
-                    savedVersesManager.toggleVerseSaved(verse)
-                  }) {
-                    Image(
-                      systemName: savedVersesManager.isVerseSaved(verse)
-                        ? "bookmark.fill" : "bookmark"
-                    )
+                  UIPasteboard.general.string = copyText
+                  showCopyToast = true
+                }) {
+                  Image(systemName: "doc.on.doc")
                     .font(.system(size: 16))
-                    .foregroundColor(savedVersesManager.isVerseSaved(verse) ? .blue : .secondary)
-                  }
-                  .buttonStyle(PlainButtonStyle())
+                    .foregroundColor(.blue)
                 }
+                .buttonStyle(PlainButtonStyle())
               }
               .padding(.vertical, 4)
               .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
@@ -446,19 +427,15 @@ struct SearchView: View {
     }
     .toast(
       isShowing: $showCopyToast,
-      message: "Verse Copied",
+      message: "Quote Copied",
       icon: "doc.on.doc.fill",
       color: .green,
       duration: 1.2
     )
-    // Sheet for verse card creator
-    .sheet(item: $selectedVerseForCard) { verse in
-      VerseCardCreator(verse: verse)
-    }
   }
 
   func performSearch() {
-    guard bibleManager.isLoaded, !query.isEmpty else {
+    guard wisdomManager.isLoaded, !query.isEmpty else {
       DispatchQueue.main.async {
         self.results = []
         self.isSearching = false
@@ -469,13 +446,14 @@ struct SearchView: View {
     let searchQuery = query.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
 
     DispatchQueue.global(qos: .userInitiated).async {
-      // Use BibleManager's optimized search
-      let searchResults = self.bibleManager.searchVerses(query: searchQuery, limit: 100)
+      let searchResults = self.wisdomManager.quotes.filter { quote in
+        quote.text.localizedCaseInsensitiveContains(searchQuery) ||
+          (quote.author?.localizedCaseInsensitiveContains(searchQuery) ?? false)
+      }
 
       DispatchQueue.main.async {
-        // Use withAnimation for smooth transitions
         withAnimation(.easeInOut(duration: 0.2)) {
-          self.results = searchResults
+          self.results = Array(searchResults.prefix(100))
           self.isSearching = false
         }
       }
@@ -557,7 +535,6 @@ struct SearchView_Previews: PreviewProvider {
     NavigationView {
       SearchView()
         .environmentObject(UserSettings())
-        .environmentObject(SavedVersesManager())
     }
   }
 }
