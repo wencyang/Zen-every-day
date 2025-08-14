@@ -7,7 +7,7 @@ struct ContentView: View {
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   @StateObject var dailyWisdomManager = DailyWisdomManager()
 
-  @State private var selectedTab = 0  // 0: Daily Quote, 1: Search, 2: Study, 3: Topics, 4: More
+  @State private var selectedTab = 0  // 0: Daily Quote, 1: Search, 2: Study, 3: More
   @AppStorage("musicVolume") private var musicVolume: Double = 0.5
 
 
@@ -139,22 +139,14 @@ struct ContentView: View {
       }
       .tag(2)
 
-      NavigationView {
-        ReadingPlansView()  // NEW
-      }
-      .tabItem {
-        Label("Reading Plans", systemImage: "book.circle")  // Updated
-      }
-      .tag(3)
-
-      // 5) More Tab
+      // 4) More Tab
       NavigationView {
         MoreView()
       }
       .tabItem {
         Label("More", systemImage: "ellipsis.circle.fill")
       }
-      .tag(4)
+      .tag(3)
     }
     .navigationViewStyle(.stack)
     .onAppear {
