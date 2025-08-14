@@ -132,7 +132,7 @@ struct ContentView: View {
       // 3) Study Tab
 
       NavigationStack {
-        CombinedBibleStudyView()
+        StudyView()
       }
       .tabItem {
         Label("Study", systemImage: "book.fill")

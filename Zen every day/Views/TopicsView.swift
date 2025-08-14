@@ -18,109 +18,52 @@ struct TopicsView: View {
 
   let topics: [TopicItem] = [
     TopicItem(
-      name: "Faith",
-      keyword: "faith",
-      icon: "hands.sparkles.fill",
-      color: .blue,
-      gradient: [.blue, .cyan],
-      description: "Trust and belief in God's promises"
+      name: "Mindfulness",
+      keyword: "mindfulness",
+      icon: "eye",
+      color: .green,
+      gradient: [.green, .mint],
+      description: "Awareness of the present moment"
     ),
     TopicItem(
-      name: "Hope",
-      keyword: "hope",
-      icon: "sunrise.fill",
-      color: .orange,
-      gradient: [.orange, .yellow],
-      description: "Looking forward with confidence"
-    ),
-    TopicItem(
-      name: "Love",
-      keyword: "love",
+      name: "Compassion",
+      keyword: "compassion",
       icon: "heart.fill",
       color: .red,
       gradient: [.red, .pink],
-      description: "God's love and love for others"
+      description: "Caring for all beings"
     ),
     TopicItem(
-      name: "Grace",
-      keyword: "grace",
-      icon: "sparkles",
+      name: "Wisdom",
+      keyword: "wisdom",
+      icon: "lightbulb.fill",
       color: .purple,
       gradient: [.purple, .indigo],
-      description: "Unmerited favor and divine blessing"
+      description: "Insight into the nature of reality"
     ),
     TopicItem(
-      name: "Salvation",
-      keyword: "salvation",
-      icon: "cross.fill",
-      color: .green,
-      gradient: [.green, .mint],
-      description: "Deliverance and eternal life through Christ"
+      name: "Impermanence",
+      keyword: "impermanence",
+      icon: "clock",
+      color: .orange,
+      gradient: [.orange, .yellow],
+      description: "Understanding change"
     ),
     TopicItem(
-      name: "Forgiveness",
-      keyword: "forgive",
-      icon: "hand.raised.fill",
-      color: .teal,
-      gradient: [.teal, .cyan],
-      description: "Mercy and pardoning of sins"
-    ),
-    TopicItem(
-      name: "Redemption",
-      keyword: "redemption",
-      icon: "arrow.up.circle.fill",
-      color: .indigo,
-      gradient: [.indigo, .blue],
-      description: "Restoration and being made new"
-    ),
-    TopicItem(
-      name: "Joy",
-      keyword: "joy",
-      icon: "sun.max.fill",
+      name: "Suffering",
+      keyword: "suffering",
+      icon: "exclamationmark.triangle.fill",
       color: .yellow,
       gradient: [.yellow, .orange],
-      description: "Deep happiness and spiritual delight"
+      description: "Recognizing and easing dukkha"
     ),
     TopicItem(
       name: "Peace",
       keyword: "peace",
       icon: "leaf.fill",
       color: .mint,
-      gradient: [.mint, .green],
-      description: "Tranquility and harmony with God"
-    ),
-    TopicItem(
-      name: "Encouragement",
-      keyword: "encourage",
-      icon: "arrow.up.heart.fill",
-      color: .pink,
-      gradient: [.pink, .red],
-      description: "Strength and motivation in difficult times"
-    ),
-    // Additional topics
-    TopicItem(
-      name: "Patience",
-      keyword: "patience",
-      icon: "hourglass",
-      color: .orange,
-      gradient: [.orange, .yellow],
-      description: "Waiting on God's timing"
-    ),
-    TopicItem(
-      name: "Kindness",
-      keyword: "kindness",
-      icon: "hand.thumbsup.fill",
-      color: .teal,
-      gradient: [.teal, .cyan],
-      description: "Showing God's love to others"
-    ),
-    TopicItem(
-      name: "Courage",
-      keyword: "courage",
-      icon: "shield.fill",
-      color: .indigo,
-      gradient: [.indigo, .purple],
-      description: "Strength to do what is right"
+      gradient: [.mint, .teal],
+      description: "Calmness and serenity"
     ),
   ]
 
@@ -154,11 +97,11 @@ struct TopicsView: View {
               }
 
               VStack(spacing: 4) {
-                Text("Biblical Topics")
+                Text("Buddhist Topics")
                   .font(.largeTitle)
                   .fontWeight(.bold)
 
-                Text("Explore God's Word by theme")
+                Text("Explore the teachings by theme")
                   .font(.subheadline)
                   .foregroundColor(.secondary)
               }
@@ -179,12 +122,12 @@ struct TopicsView: View {
 
           // Footer
           VStack(spacing: 8) {
-            Text("Discover verses organized by spiritual themes")
+            Text("Discover quotes organized by themes")
               .font(.caption)
               .foregroundColor(.secondary)
               .multilineTextAlignment(.center)
 
-            Text("Each topic contains carefully selected passages")
+            Text("Each topic contains carefully selected teachings")
               .font(.caption2)
               .foregroundColor(.secondary.opacity(0.7))
           }
