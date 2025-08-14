@@ -20,7 +20,7 @@ struct DonationView: View {
                 .fill(Color.brown.opacity(0.1))
             )
 
-          Text("Support Daily Bible")
+          Text("Support Zen Every Day")
             .font(.title)
             .fontWeight(.bold)
 
@@ -32,7 +32,7 @@ struct DonationView: View {
 
         // Message
         VStack(spacing: 16) {
-          Text("Daily Bible is completely free and ad-free, and it always will be.")
+          Text("Zen Every Day is completely free and ad-free, and it always will be.")
             .font(.system(size: settings.fontSize))
             .multilineTextAlignment(.center)
             .padding(.horizontal)
@@ -98,7 +98,7 @@ struct DonationView: View {
       Button("OK") {}
     } message: {
       Text(
-        "Your support means a lot! Thank you for helping keep Daily Bible free and ad-free for everyone."
+        "Your support means a lot! Thank you for helping keep Zen Every Day free and ad-free for everyone."
       )
     }
     .alert("Error", isPresented: .constant(donationManager.purchaseError != nil)) {

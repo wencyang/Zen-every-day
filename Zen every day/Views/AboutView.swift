@@ -17,7 +17,7 @@ struct AboutView: View {
                 .fill(Color.blue.opacity(0.1))
             )
 
-          Text("Daily Bible")
+          Text("Zen Every Day")
             .font(.largeTitle)
             .fontWeight(.bold)
 
@@ -27,7 +27,7 @@ struct AboutView: View {
 
           // Highlighted tagline
           Text(
-            "A beautifully simple, modern Bible app that's completely free with no ads, no subscriptions, and no distractions – just pure scripture at your fingertips."
+            "A beautifully simple, modern Buddhist wisdom app that's completely free with no ads, no subscriptions, and no distractions – just pure inspiration at your fingertips."
           )
           .font(.system(size: settings.fontSize * 0.95, weight: .medium))
           .foregroundColor(.primary)
@@ -54,7 +54,7 @@ struct AboutView: View {
             SectionHeader(title: "About", icon: "info.circle.fill")
 
             Text(
-              "Daily Bible is a complimentary application designed to facilitate Bible study and spiritual enrichment. This application provides users with carefully curated biblical texts, comprehensive study tools, and daily devotional content. Whether you are deepening your existing faith journey or exploring spirituality for the first time, Daily Bible offers convenient access to inspirational scriptures and thoughtful theological insights to enhance your spiritual growth and understanding."
+              "Zen Every Day is a complimentary application designed to share Buddhist wisdom and support mindful living. The app provides users with carefully curated teachings, inspirational quotes, and daily reflections. Whether you are deepening an existing practice or exploring mindfulness for the first time, Zen Every Day offers convenient access to insightful guidance for your journey."
             )
             .font(.system(size: settings.fontSize * 0.9))
             .foregroundColor(.primary.opacity(0.8))
@@ -74,7 +74,7 @@ struct AboutView: View {
 
               This application is provided "as is" without warranty of any kind, either express or implied, including but not limited to the implied warranties of merchantability, fitness for a particular purpose, or non-infringement. The developers, publishers, and distributors of this application shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising out of your access to, or use of, the application.
 
-              All biblical text contained within this application is sourced from the Authorized King James Version (KJV), which resides in the public domain. No copyright infringement is intended or implied through the use of these texts.
+              All wisdom quotes contained within this application are adapted from Buddhist teachings and are released under the CC0 public domain dedication. No copyright infringement is intended or implied through the use of these texts.
               """
             )
             .font(.system(size: settings.fontSize * 0.9))
@@ -122,7 +122,7 @@ struct AboutView: View {
 
           // Copyright Footer
           VStack(spacing: 8) {
-            Text("© 2025 Daily Bible")
+            Text("© 2025 Zen Every Day")
               .font(.caption)
               .foregroundColor(.secondary)
 

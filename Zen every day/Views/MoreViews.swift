@@ -37,11 +37,11 @@ struct MoreView: View {
               )
 
               NavigationLinkRow(
-                title: "Bible App Activity",
+                title: "App Activity",
                 subtitle: "Reading progress",
                 icon: "chart.bar.fill",
                 iconColor: .green,
-                destination: BibleAppActivityView()
+                destination: AppActivityView()
               )
             }
           }
@@ -51,7 +51,7 @@ struct MoreView: View {
             VStack(spacing: 8) {
               NavigationLinkRow(
                 title: "Share App",
-                subtitle: "Tell others about Daily Bible",
+                subtitle: "Tell others about Zen Every Day",
                 icon: "square.and.arrow.up",
                 iconColor: .indigo,
                 destination: ShareAppView()
@@ -66,7 +66,7 @@ struct MoreView: View {
               )
 
               NavigationLinkRow(
-                title: "Support Daily Bible",
+                title: "Support Zen Every Day",
                 subtitle: "Buy us a coffee",
                 icon: "cup.and.saucer.fill",
                 iconColor: .brown,

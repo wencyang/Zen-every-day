@@ -5,9 +5,9 @@ struct ShareAppView: View {
   @State private var showingShareSheet = false
   @State private var showingCopiedAlert = false
 
-  let appStoreLink = "https://apps.apple.com/app/daily-bible/id123456789"  // Replace with your actual App Store ID
+  let appStoreLink = "https://apps.apple.com/app/zen-every-day/id123456789"  // Replace with your actual App Store ID
   let shareMessage =
-    "I've been using Daily Bible for my daily devotions. It's a beautiful app with daily verses and Bible study tools. Check it out!"
+    "I've been using Zen Every Day for daily Buddhist wisdom. It's a beautiful app with inspirational quotes. Check it out!"
 
   var body: some View {
     ScrollView {
@@ -23,11 +23,11 @@ struct ShareAppView: View {
                 .fill(Color.blue.opacity(0.1))
             )
 
-          Text("Share Daily Bible")
+          Text("Share Zen Every Day")
             .font(.title2)
             .fontWeight(.bold)
 
-          Text("Spread the word and help others discover Daily Bible")
+          Text("Spread the word and help others discover Zen Every Day")
             .font(.subheadline)
             .foregroundColor(.secondary)
             .multilineTextAlignment(.center)
@@ -239,7 +239,7 @@ struct ShareAppView: View {
 
   func shareViaEmail() {
     let subject =
-      "Check out Daily Bible App".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+      "Check out Zen Every Day App".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
       ?? ""
     let body =
       "\(shareMessage)\n\n\(appStoreLink)".addingPercentEncoding(

@@ -409,10 +409,10 @@ class ReadingPlansManager: ObservableObject {
         readings: createProverbsWisdomReadings()
       ),
 
-      // Women of the Bible
+      // Women of Wisdom
       ReadingPlan(
         id: "women-of-faith",
-        title: "Women of the Bible",
+        title: "Women of Wisdom",
         description: "Lessons from faithful women in 7 days",
         duration: 7,
         category: .character,

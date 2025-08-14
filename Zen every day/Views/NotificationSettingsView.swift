@@ -68,7 +68,7 @@ struct NotificationSettingsView: View {
       }
     } message: {
       Text(
-        "You denied notification permission. To enable notifications, please go to Settings > Daily Bible > Notifications and turn on 'Allow Notifications'."
+        "You denied notification permission. To enable notifications, please go to Settings > Zen Every Day > Notifications and turn on 'Allow Notifications'."
       )
     }
     .sheet(isPresented: $showingTimeSelection) {

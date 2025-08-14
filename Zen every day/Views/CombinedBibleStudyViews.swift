@@ -15,12 +15,12 @@ struct CombinedBibleStudyView: View {
               .font(.system(size: 24))
               .foregroundColor(.blue)
 
-            Text("Bible Study")
+            Text("Study")
               .font(.title2)
               .fontWeight(.bold)
           }
 
-          Text("Explore Scripture by theme or browse by book")
+          Text("Explore teachings by theme or browse by collection")
             .font(.caption)
             .foregroundColor(.secondary)
         }
@@ -239,7 +239,7 @@ struct TopicalStudyView: View {
               Spacer()
             }
 
-            Text("Discover what the Bible says about life's important topics")
+            Text("Discover teachings on life's important topics")
               .font(.subheadline)
               .foregroundColor(.secondary)
               .frame(maxWidth: .infinity, alignment: .leading)
@@ -440,7 +440,7 @@ struct TraditionalBibleView: View {
             ProgressView()
               .scaleEffect(1.2)
 
-            Text("Loading Bible...")
+            Text("Loading wisdom...")
               .font(.subheadline)
               .foregroundColor(.secondary)
           }
@@ -451,7 +451,7 @@ struct TraditionalBibleView: View {
             Image(systemName: "exclamationmark.triangle")
               .font(.largeTitle)
               .foregroundColor(.red)
-            Text("Error Loading Bible")
+            Text("Error Loading Wisdom")
               .font(.headline)
             Text(errorMessage)
               .foregroundColor(.red)

@@ -13,7 +13,7 @@ struct LegalView: View {
 
           This application is provided on an "as is" basis without any representations or warranties, express or implied. The developers, publishers, and distributors of this app shall not be liable for any damages arising from its use.
 
-          All Bible text used in this application is sourced from the Authorized King James Version (KJV) which is in the public domain. No copyright infringement is intended.
+          All wisdom text used in this application is adapted from Buddhist teachings released under the CC0 public domain dedication. No copyright infringement is intended.
           """
         )
         .font(.body)

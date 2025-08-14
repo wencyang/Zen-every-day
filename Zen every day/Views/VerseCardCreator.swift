@@ -123,7 +123,7 @@ struct VerseCardCreator: View {
         Button("Cancel", role: .cancel) {}
       } message: {
         Text(
-          "Please allow Daily Bible to access your photo library in Settings to save verse cards.")
+          "Please allow Zen Every Day to access your photo library in Settings to save wisdom cards.")
       }
       .overlay(
         Group {
@@ -345,7 +345,7 @@ struct VerseCardCreator: View {
         .foregroundColor: UIColor.white.withAlphaComponent(0.6),
       ]
 
-      let branding = "Daily Bible" as NSString
+      let branding = "Zen Every Day" as NSString
       let brandingSize = branding.size(withAttributes: brandingAttributes)
       branding.draw(
         at: CGPoint(
@@ -423,7 +423,7 @@ struct VerseCardPreview: View {
             Image(systemName: "book.closed.fill")
               .font(.system(size: 10))  // Scaled down
               .foregroundColor(.white.opacity(0.7))
-            Text("Daily Bible")
+            Text("Zen Every Day")
               .font(.custom("Georgia", size: 10))  // Scaled down from 22
               .foregroundColor(.white.opacity(0.7))
           }
