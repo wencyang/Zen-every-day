@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct BibleAppActivityView: View {
+struct AppActivityView: View {
   @EnvironmentObject var activityManager: ReadingActivityManager
   @EnvironmentObject var settings: UserSettings
   @State private var selectedMonth: Int
@@ -24,7 +24,7 @@ struct BibleAppActivityView: View {
       VStack(spacing: 20) {
         // Header
         VStack(spacing: 8) {
-          Text("Bible Reading Activity")
+          Text("Reading Activity")
             .font(.title2)
             .bold()
 
@@ -429,10 +429,10 @@ struct StatCard: View {
   }
 }
 
-struct BibleAppActivityView_Previews: PreviewProvider {
+struct AppActivityView_Previews: PreviewProvider {
   static var previews: some View {
     NavigationView {
-      BibleAppActivityView()
+      AppActivityView()
         .environmentObject(ReadingActivityManager())
         .environmentObject(UserSettings())
     }

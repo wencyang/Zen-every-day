@@ -84,7 +84,7 @@ struct SearchView: View {
               .foregroundColor(isTextFieldFocused ? .primary : .secondary)
               .font(.system(size: 20, weight: .medium))
 
-            TextField("Search Bible...", text: $query)
+            TextField("Search wisdom...", text: $query)
               .font(.system(size: 18, weight: .medium))
               .textFieldStyle(PlainTextFieldStyle())
               .disableAutocorrection(true)
@@ -142,11 +142,11 @@ struct SearchView: View {
                 )
 
               VStack(spacing: 2) {
-                Text("Search God's Word")
+                Text("Search Teachings")
                   .font(.headline)
                   .fontWeight(.semibold)
 
-                Text("Discover verses that speak to your heart")
+                Text("Discover quotes that inspire your practice")
                   .font(.caption)
                   .foregroundColor(.secondary)
               }
@@ -173,12 +173,12 @@ struct SearchView: View {
             .padding(.horizontal)
         }
 
-        // Loading state while Bible loads
+        // Loading state while wisdom loads
         if bibleManager.isLoading {
           VStack(spacing: 16) {
             ProgressView()
               .scaleEffect(1.2)
-            Text("Loading Bible...")
+            Text("Loading wisdom...")
               .font(.subheadline)
               .foregroundColor(.secondary)
           }

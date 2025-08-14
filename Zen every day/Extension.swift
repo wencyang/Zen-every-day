@@ -1,6 +1,6 @@
 //
 //  Extensions.swift
-//  Daily Bible
+//  Zen Every Day
 //
 //  Simple extension to remove the ¶ character
 //

@@ -92,7 +92,7 @@ struct AudioSettingsView: View {
       Section(
         header: Text("About Audio"),
         footer: Text(
-          "The background music is designed to enhance your spiritual experience while reading daily verses. All audio content is original and created specifically for Daily Bible."
+          "The background music is designed to enhance your spiritual experience while reading daily wisdom. All audio content is original and created specifically for Zen Every Day."
         )
       ) {
         HStack {

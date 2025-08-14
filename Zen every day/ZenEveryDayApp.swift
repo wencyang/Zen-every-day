@@ -1,6 +1,6 @@
 //
-//  Daily_BibleApp.swift
-//  Daily Bible
+//  ZenEveryDayApp.swift
+//  Zen Every Day
 //
 //  Created by Wencao Yang on 1/21/25.
 //
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct Daily_BibleApp: App {
+struct ZenEveryDayApp: App {
   @AppStorage("appearanceMode") var appearanceMode: String = "system"
   @StateObject var settings = UserSettings()
   @StateObject var activityManager = ReadingActivityManager()
@@ -80,7 +80,7 @@ struct Daily_BibleApp: App {
 
   func prepareApp() {
     // Kick off heavy loading tasks in the background and show the interface
-    BibleManager.shared.loadBibleIfNeeded()
+    WisdomManager.shared.loadWisdomIfNeeded()
     isAppReady = true
   }
 }
