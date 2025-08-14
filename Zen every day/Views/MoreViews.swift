@@ -47,7 +47,7 @@ struct MoreView: View {
           }
 
           // Sharing Section
-          SectionContainer(title: "Share & Support", icon: "heart.circle") {
+          SectionContainer(title: "Share", icon: "heart.circle") {
             VStack(spacing: 8) {
               NavigationLinkRow(
                 title: "Share App",
@@ -65,13 +65,6 @@ struct MoreView: View {
                 action: rateApp
               )
 
-              NavigationLinkRow(
-                title: "Support Zen Every Day",
-                subtitle: "Buy us a coffee",
-                icon: "cup.and.saucer.fill",
-                iconColor: .brown,
-                destination: DonationView()
-              )
             }
           }
 
