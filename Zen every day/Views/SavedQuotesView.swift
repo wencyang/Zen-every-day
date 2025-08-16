@@ -50,8 +50,17 @@ struct SavedQuotesView: View {
                   .foregroundColor(.secondary)
               }
 
-              HStack {
+              HStack(spacing: 8) {
                 Spacer()
+                Button(action: {
+                  savedQuotesManager.removeSavedQuote(saved)
+                }) {
+                  Image(systemName: "bookmark.slash")
+                    .font(.system(size: 16))
+                    .foregroundColor(.red)
+                }
+                .buttonStyle(PlainButtonStyle())
+
                 Button(action: {
                   var copyText = saved.text
                   if let author = saved.author {
@@ -90,12 +99,6 @@ struct SavedQuotesView: View {
       icon: "doc.on.doc.fill",
       color: .green,
       duration: 1.2
-    )
-    .toast(
-      isShowing: $savedQuotesManager.showRemovedToast,
-      message: "Bookmark Removed",
-      icon: "bookmark.slash.fill",
-      color: .red
     )
   }
 }

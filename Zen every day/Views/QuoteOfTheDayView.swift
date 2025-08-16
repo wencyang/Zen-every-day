@@ -102,7 +102,7 @@ struct QuoteHistoryCard: View {
 
   private var quote: WisdomQuote {
     WisdomQuote(
-      id: UUID().uuidString,
+      id: entry.id,
       author: entry.author,
       text: entry.text,
       work: nil,
