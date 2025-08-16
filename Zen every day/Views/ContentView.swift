@@ -10,6 +10,7 @@ struct ContentView: View {
 
   @State private var selectedTab = 0  // 0: Daily Quote, 1: Search, 2: Study, 3: More
   @AppStorage("musicVolume") private var musicVolume: Double = 0.5
+  @State private var showQuoteCard = false
 
 
   init() {
@@ -52,7 +53,7 @@ struct ContentView: View {
 
   var body: some View {
     TabView(selection: $selectedTab) {
-      // 1) Daily Verse Tab
+      // 1) Daily Quote Tab
       NavigationView {
         ZStack {
           Image(backgroundManager.currentPhotoName)
@@ -79,14 +80,26 @@ struct ContentView: View {
                       .foregroundColor(.white)
                   }
 
-                  Button(action: {
-                    savedQuotesManager.toggleQuoteSaved(quote)
-                  }) {
-                    Image(systemName: savedQuotesManager.isQuoteSaved(quote) ? "bookmark.fill" : "bookmark")
-                      .font(.title2)
-                      .foregroundColor(.white)
-                      .padding(8)
-                      .background(Color.black.opacity(0.5).clipShape(Circle()))
+                  HStack(spacing: 16) {
+                    Button(action: {
+                      savedQuotesManager.toggleQuoteSaved(quote)
+                    }) {
+                      Image(systemName: savedQuotesManager.isQuoteSaved(quote) ? "bookmark.fill" : "bookmark")
+                        .font(.title2)
+                        .foregroundColor(.white)
+                        .padding(8)
+                        .background(Color.black.opacity(0.5).clipShape(Circle()))
+                    }
+
+                    Button(action: {
+                      showQuoteCard = true
+                    }) {
+                      Image(systemName: "square.and.arrow.up")
+                        .font(.title2)
+                        .foregroundColor(.white)
+                        .padding(8)
+                        .background(Color.black.opacity(0.5).clipShape(Circle()))
+                    }
                   }
                 }
                 .padding(.horizontal)
@@ -166,6 +179,12 @@ struct ContentView: View {
     }
     .onChange(of: musicVolume) { _ , _ in
       musicManager.updateVolume()
+    }
+    .sheet(isPresented: $showQuoteCard) {
+      if let quote = dailyWisdomManager.dailyQuote {
+        QuoteCardCreator(quote: quote)
+          .environmentObject(backgroundManager)
+      }
     }
     .toast(
       isShowing: $savedQuotesManager.showSavedToast,

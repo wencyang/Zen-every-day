@@ -8,7 +8,7 @@ struct NotificationSettingsView: View {
 
   var body: some View {
     Form {
-      Section(header: Text("Daily Verse Notifications")) {
+      Section(header: Text("Daily Quote Notifications")) {
         Toggle("Enable Notifications", isOn: $notificationManager.isNotificationEnabled)
           .onChange(of: notificationManager.isNotificationEnabled) { oldValue, newValue in
             if newValue {
@@ -47,11 +47,9 @@ struct NotificationSettingsView: View {
         }
       }
 
-      // The system notification only displays a short snippet, so the app no longer offers a full verse option.
-
       Section(
         footer: Text(
-          "When enabled, you'll receive a daily notification with the verse of the day at your selected time."
+          "When enabled, you'll receive a daily notification with the quote of the day at your selected time."
         )
       ) {
         EmptyView()
@@ -97,7 +95,7 @@ struct TimePickerSheet: View {
   var body: some View {
     NavigationView {
       VStack {
-        Text("Choose a time to receive your daily verse")
+        Text("Choose a time to receive your daily quote")
           .font(.headline)
           .padding()
 

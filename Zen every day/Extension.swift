@@ -8,7 +8,7 @@
 import Foundation
 
 extension String {
-  var cleanVerse: String {
+  var cleanQuote: String {
     return self.replacingOccurrences(of: "\u{00b6}", with: "")
   }
 

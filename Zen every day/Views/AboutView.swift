@@ -96,7 +96,7 @@ struct AboutView: View {
               • No personal data is collected without your explicit consent
               • All application data is stored locally on your device
               • No information is transmitted to or shared with third parties
-              • Your reading history and saved verses remain private and secure
+              • Your reading history and saved quotes remain private and secure
               • Notification preferences are managed entirely on your device
 
               We are committed to maintaining the confidentiality and security of your personal information. This application does not employ analytics, tracking, or any form of data collection that could compromise your privacy.

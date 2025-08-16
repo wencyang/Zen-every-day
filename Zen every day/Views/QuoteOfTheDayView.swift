@@ -1,50 +1,42 @@
 import SwiftUI
 
-struct VerseOfTheDayView: View {
-  @State private var history: [DailyVerseEntry] = []
+struct QuoteOfTheDayView: View {
+  @State private var history: [DailyQuoteEntry] = []
   @EnvironmentObject var settings: UserSettings
-  @EnvironmentObject var savedVersesManager: SavedVersesManager
+  @EnvironmentObject var savedQuotesManager: SavedQuotesManager
 
   var body: some View {
     ScrollView {
       VStack(spacing: 24) {
-        // Header Section
-        VStack(spacing: 16) {
-          // Icon and Title
-          VStack(spacing: 12) {
-            VStack(spacing: 4) {
-              Text("Verse of the Day")
-                .font(.title2)
-                .fontWeight(.bold)
+        VStack(spacing: 12) {
+          Text("Quote of the Day")
+            .font(.title2)
+            .fontWeight(.bold)
 
-              if !history.isEmpty {
-                Text("\(history.count) day\(history.count == 1 ? "" : "s") of spiritual journey")
-                  .font(.subheadline)
-                  .foregroundColor(.secondary)
-              } else {
-                Text("Your daily verse history")
-                  .font(.subheadline)
-                  .foregroundColor(.secondary)
-              }
-            }
+          if !history.isEmpty {
+            Text("\(history.count) day\(history.count == 1 ? "" : "s") of inspiration")
+              .font(.subheadline)
+              .foregroundColor(.secondary)
+          } else {
+            Text("Your daily quote history")
+              .font(.subheadline)
+              .foregroundColor(.secondary)
           }
         }
         .padding(.top, 20)
 
-        // Content
         if history.isEmpty {
-          // Empty State
           VStack(spacing: 20) {
-            Image(systemName: "book.closed")
+            Image(systemName: "quote.bubble")
               .font(.system(size: 60))
               .foregroundColor(.secondary.opacity(0.5))
 
-            Text("No daily verses yet")
+            Text("No daily quotes yet")
               .font(.title3)
               .fontWeight(.medium)
               .foregroundColor(.secondary)
 
-            Text("Your daily verse history will appear here as you use the app")
+            Text("Your daily quote history will appear here as you use the app")
               .font(.subheadline)
               .foregroundColor(.secondary.opacity(0.8))
               .multilineTextAlignment(.center)
@@ -52,30 +44,25 @@ struct VerseOfTheDayView: View {
           }
           .padding(.vertical, 40)
         } else {
-          // History List
           LazyVStack(spacing: 16) {
             ForEach(history.sorted(by: { $0.date > $1.date })) { entry in
-              VerseHistoryCard(
-                entry: entry,
-                onBookmark: { verse in
-                  savedVersesManager.toggleVerseSaved(verse)
-                }
-              )
+              QuoteHistoryCard(entry: entry, onBookmark: { quote in
+                savedQuotesManager.toggleQuoteSaved(quote)
+              })
               .environmentObject(settings)
-              .environmentObject(savedVersesManager)
+              .environmentObject(savedQuotesManager)
             }
           }
           .padding(.horizontal)
         }
 
-        // Footer
         VStack(spacing: 8) {
-          Text("Daily verses are automatically saved for 30 days")
+          Text("Daily quotes are automatically saved for 30 days")
             .font(.caption)
             .foregroundColor(.secondary)
             .multilineTextAlignment(.center)
 
-          Text("Each verse is carefully selected to inspire and guide your day")
+          Text("Each quote is carefully selected to inspire your day")
             .font(.caption2)
             .foregroundColor(.secondary.opacity(0.7))
             .multilineTextAlignment(.center)
@@ -95,66 +82,49 @@ struct VerseOfTheDayView: View {
     )
     .navigationTitle("")
     .navigationBarTitleDisplayMode(.inline)
-    .onAppear {
-      loadHistory()
-    }
+    .onAppear(perform: loadHistory)
   }
 
-  func loadHistory() {
-    if let data = UserDefaults.standard.data(forKey: "dailyVerseHistory"),
-      let loadedHistory = try? JSONDecoder().decode([DailyVerseEntry].self, from: data)
-    {
-      history = loadedHistory
+  private func loadHistory() {
+    if let data = UserDefaults.standard.data(forKey: "dailyQuoteHistory"),
+       let loaded = try? JSONDecoder().decode([DailyQuoteEntry].self, from: data) {
+      history = loaded
     }
   }
 }
 
-struct VerseHistoryCard: View {
-  let entry: DailyVerseEntry
-  let onBookmark: (Verse) -> Void
+struct QuoteHistoryCard: View {
+  let entry: DailyQuoteEntry
+  let onBookmark: (WisdomQuote) -> Void
   @EnvironmentObject var settings: UserSettings
-  @EnvironmentObject var savedVersesManager: SavedVersesManager
+  @EnvironmentObject var savedQuotesManager: SavedQuotesManager
   @State private var isExpanded = false
 
-  var verse: Verse {
-    // Create a Verse object from the entry for bookmark functionality
-    let components = entry.reference.components(separatedBy: " ")
-    let bookName = components.dropLast().joined(separator: " ")
-    let chapterVerse = components.last ?? ""
-    let parts = chapterVerse.components(separatedBy: ":")
-
-    return Verse(
-      book_name: bookName,
-      book: 1,  // Default value
-      chapter: Int(parts.first ?? "1") ?? 1,
-      verse: Int(parts.last ?? "1") ?? 1,
-      text: entry.text
-    )
+  private var quote: WisdomQuote {
+    WisdomQuote(id: UUID().uuidString, author: entry.author, text: entry.text, work: nil)
   }
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 0) {
-      // Header with date and actions
-      HStack(alignment: .center) {
+    VStack(spacing: 0) {
+      HStack {
         VStack(alignment: .leading, spacing: 4) {
           Text(formattedDate(entry.date))
-            .font(.system(size: 16, weight: .semibold))
-            .foregroundColor(.blue)
-
-          Text(entry.reference)
             .font(.system(size: 14, weight: .medium))
             .foregroundColor(.secondary)
+          if let author = entry.author {
+            Text(author)
+              .font(.system(size: 13))
+              .foregroundColor(.secondary)
+          }
         }
 
         Spacer()
 
         HStack(spacing: 16) {
-          Button(action: {
-            onBookmark(verse)
-          }) {
-            Image(systemName: savedVersesManager.isVerseSaved(verse) ? "bookmark.fill" : "bookmark")
+          Button(action: { onBookmark(quote) }) {
+            Image(systemName: savedQuotesManager.isQuoteSaved(quote) ? "bookmark.fill" : "bookmark")
               .font(.system(size: 18))
-              .foregroundColor(savedVersesManager.isVerseSaved(verse) ? .blue : .secondary)
+              .foregroundColor(savedQuotesManager.isQuoteSaved(quote) ? .blue : .secondary)
           }
           .buttonStyle(PlainButtonStyle())
 
@@ -173,7 +143,6 @@ struct VerseHistoryCard: View {
       .padding(.horizontal, 16)
       .padding(.vertical, 12)
 
-      // Verse text (expandable)
       VStack(alignment: .leading, spacing: 12) {
         if isExpanded {
           Divider()
@@ -193,7 +162,6 @@ struct VerseHistoryCard: View {
               )
             )
         } else {
-          // Preview text
           Text(entry.text)
             .font(.system(size: 14))
             .foregroundColor(.secondary)
@@ -256,12 +224,12 @@ struct VerseHistoryCard: View {
   }
 }
 
-struct VerseOfTheDayView_Previews: PreviewProvider {
+struct QuoteOfTheDayView_Previews: PreviewProvider {
   static var previews: some View {
     NavigationView {
-      VerseOfTheDayView()
+      QuoteOfTheDayView()
         .environmentObject(UserSettings())
-        .environmentObject(SavedVersesManager())
+        .environmentObject(SavedQuotesManager())
     }
   }
 }

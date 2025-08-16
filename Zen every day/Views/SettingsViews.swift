@@ -66,7 +66,7 @@ struct AudioSettingsView: View {
       Section(
         header: Text("Background Music"),
         footer: Text(
-          "Control the ambient music that plays on the Daily Verse screen. You can always manually play or pause music using the play button."
+          "Control the ambient music that plays on the Daily Quote screen. You can always manually play or pause music using the play button."
         )
       ) {
         Toggle("Auto-play music on launch", isOn: $autoPlayMusic)
