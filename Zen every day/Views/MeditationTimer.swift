@@ -344,18 +344,10 @@ struct MeditationSetupView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach([60, 180, 300, 600, 900], id: \.self) { duration in
-                        Button(action: {
+                        Button {
                             session.duration = TimeInterval(duration)
-                        }) {
-                            Text(formatDurationShort(TimeInterval(duration)))
-                                .font(.footnote.bold())
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                                .background(
-                                    Capsule()
-                                        .fill(session.duration == TimeInterval(duration) ? Color.tint : Color.gray.opacity(0.2))
-                                )
-                                .foregroundColor(session.duration == TimeInterval(duration) ? .white : .primary)
+                        } label: {
+                            quickPresetLabel(for: TimeInterval(duration))
                         }
                         .buttonStyle(.plain)
                     }
@@ -383,6 +375,19 @@ struct MeditationSetupView: View {
     private func formatDurationShort(_ duration: TimeInterval) -> String {
         let minutes = Int(duration) / 60
         return "\(minutes) min"
+    }
+
+    private func quickPresetLabel(for duration: TimeInterval) -> some View {
+        let isSelected = session.duration == duration
+        return Text(formatDurationShort(duration))
+            .font(.footnote.bold())
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(
+                Capsule()
+                    .fill(isSelected ? Color.tint : Color.gray.opacity(0.2))
+            )
+            .foregroundColor(isSelected ? .white : .primary)
     }
 }
 
@@ -557,9 +562,9 @@ struct DurationPickerView: View {
 // MARK: - Sound Picker View
 struct SoundPickerView: View {
     @ObservedObject var session: MeditationSession
-    @Environment(\.presentationMode) var presentationMode
-    @State private var playingSample: MeditationSession.AmbientSound?
-    private var samplePlayer: AVAudioPlayer?
+    @Environment(\.presentationMode) private var presentationMode
+    @State private var playingSample: MeditationSession.AmbientSound? = nil
+    private var samplePlayer: AVAudioPlayer? = nil
     
     var body: some View {
         NavigationView {
@@ -572,7 +577,7 @@ struct SoundPickerView: View {
                         HStack {
                             Image(systemName: sound.systemImage)
                                 .frame(width: 30)
-                                .foregroundColor(.tint)
+                                .foregroundStyle(.tint)
                             
                             Text(sound.rawValue)
                                 .foregroundColor(.primary)
@@ -581,7 +586,7 @@ struct SoundPickerView: View {
                             
                             if session.selectedSound == sound {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.tint)
+                                    .foregroundStyle(.tint)
                             }
                         }
                         .padding(.vertical, 8)
