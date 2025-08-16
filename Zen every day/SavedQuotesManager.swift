@@ -7,6 +7,7 @@ struct SavedQuote: Codable, Identifiable {
   let text: String
   let work: String?
   let dateSaved: Date
+  let backgroundPhotoName: String?
 }
 
 class SavedQuotesManager: ObservableObject {
@@ -46,12 +47,14 @@ class SavedQuotesManager: ObservableObject {
   func saveQuote(_ quote: WisdomQuote) {
     guard !isQuoteSaved(quote) else { return }
 
+    let photoName = UserDefaults.standard.string(forKey: "backgroundPhotoName")
     let savedQuote = SavedQuote(
       id: quote.id,
       author: quote.author,
       text: quote.text,
       work: quote.work,
-      dateSaved: Date()
+      dateSaved: Date(),
+      backgroundPhotoName: photoName
     )
 
     savedQuotes.append(savedQuote)
