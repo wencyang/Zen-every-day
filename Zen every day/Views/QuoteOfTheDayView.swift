@@ -101,7 +101,17 @@ struct QuoteHistoryCard: View {
   @State private var isExpanded = false
 
   private var quote: WisdomQuote {
-    WisdomQuote(id: UUID().uuidString, author: entry.author, text: entry.text, work: nil)
+    WisdomQuote(
+      id: UUID().uuidString,
+      author: entry.author,
+      text: entry.text,
+      work: nil,
+      ref: nil,
+      language: nil,
+      license: nil,
+      source: nil,
+      tags: nil
+    )
   }
 
   var body: some View {
