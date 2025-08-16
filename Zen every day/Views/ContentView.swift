@@ -27,7 +27,8 @@ struct ContentView: View {
                 // Home Tab - Daily Wisdom
                 HomeView(
                     dailyWisdomManager: dailyWisdomManager,
-                    streakManager: streakManager
+                    streakManager: streakManager,
+                    meditateAction: startMeditation
                 )
                 .tabItem {
                     Label("Today", systemImage: "sun.max.fill")
@@ -105,12 +106,17 @@ struct ContentView: View {
         // Start background music if enabled
         musicManager.startIfNeeded()
     }
+
+    private func startMeditation() {
+        selectedTab = 2
+    }
 }
 
 // MARK: - Home View
 struct HomeView: View {
     @ObservedObject var dailyWisdomManager: DailyWisdomManager
     @ObservedObject var streakManager: StreakManager
+    var meditateAction: () -> Void
     @State private var refreshing = false
     @State private var showingCalendar = false
     
@@ -149,7 +155,7 @@ struct HomeView: View {
                     }
                     
                     // Quick actions
-                    QuickActionsGrid()
+                    QuickActionsGrid(meditateAction: meditateAction)
                         .padding(.horizontal)
                     
                     // Recent reflections preview
@@ -194,7 +200,7 @@ struct HomeView: View {
 
 // MARK: - Quick Actions Grid
 struct QuickActionsGrid: View {
-    @State private var showingMeditation = false
+    let meditateAction: () -> Void
     @State private var showingJournal = false
     @State private var showingBreathing = false
     
@@ -213,7 +219,7 @@ struct QuickActionsGrid: View {
                     title: "Meditate",
                     subtitle: "5 min",
                     color: .green,
-                    action: { showingMeditation = true }
+                    action: meditateAction
                 )
                 
                 QuickActionCard(
@@ -240,9 +246,6 @@ struct QuickActionsGrid: View {
                     action: { }
                 )
             }
-        }
-        .sheet(isPresented: $showingMeditation) {
-            MeditationTimerView()
         }
         .sheet(isPresented: $showingJournal) {
             JournalView()
@@ -388,18 +391,44 @@ struct ReflectionCard: View {
 // MARK: - Explore View
 struct ExploreView: View {
     @ObservedObject var streakManager: StreakManager
+    @State private var selectedSection = 0
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Picker("Explore", selection: $selectedSection) {
+                Text("Discover").tag(0)
+                Text("Search").tag(1)
+                Text("Study").tag(2)
+            }
+            .pickerStyle(.segmented)
+            .padding()
+
+            if selectedSection == 0 {
+                DiscoverExploreView()
+            } else if selectedSection == 1 {
+                NavigationView {
+                    SearchView()
+                }
+            } else {
+                StudyView()
+            }
+        }
+    }
+}
+
+struct DiscoverExploreView: View {
     @State private var searchText = ""
     @State private var selectedCategory: String = "All"
     @State private var quotes: [WisdomQuote] = []
-    
+
     let categories = ["All", "Mindfulness", "Compassion", "Wisdom", "Peace", "Gratitude"]
-    
+
     var filteredQuotes: [WisdomQuote] {
         let searchFiltered = searchText.isEmpty ? quotes : quotes.filter {
             $0.text.localizedCaseInsensitiveContains(searchText) ||
             ($0.author?.localizedCaseInsensitiveContains(searchText) ?? false)
         }
-        
+
         if selectedCategory == "All" {
             return searchFiltered
         } else {
@@ -408,7 +437,7 @@ struct ExploreView: View {
             }
         }
     }
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -416,7 +445,7 @@ struct ExploreView: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.secondary)
-                    
+
                     TextField("Search quotes...", text: $searchText)
                         .textFieldStyle(.plain)
                 }
@@ -427,7 +456,7 @@ struct ExploreView: View {
                 )
                 .padding(.horizontal)
                 .padding(.top)
-                
+
                 // Category filter
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 12) {
@@ -442,7 +471,7 @@ struct ExploreView: View {
                     .padding(.horizontal)
                 }
                 .padding(.vertical, 12)
-                
+
                 // Quotes list
                 ScrollView {
                     LazyVStack(spacing: 16) {
@@ -461,7 +490,7 @@ struct ExploreView: View {
             }
         }
     }
-    
+
     private func loadQuotes() {
         quotes = WisdomManager.shared.quotes.shuffled()
     }
