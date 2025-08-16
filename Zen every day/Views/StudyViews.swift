@@ -44,6 +44,22 @@ struct TopicalStudyView: View {
           gradient: [.purple, .indigo], description: "Insight into reality"),
       ]
     ),
+    TopicCategory(
+      name: "Practice Qualities",
+      icon: "brain.head.profile",
+      color: .teal,
+      topics: [
+        TopicItem(
+          name: "Generosity", keyword: "generosity", icon: "hands.sparkles.fill", color: .mint,
+          gradient: [.mint, .green], description: "Joy of giving"),
+        TopicItem(
+          name: "Equanimity", keyword: "equanimity", icon: "yinyang", color: .teal,
+          gradient: [.teal, .blue], description: "Balanced mind in all conditions"),
+        TopicItem(
+          name: "Patience", keyword: "patience", icon: "hourglass", color: .brown,
+          gradient: [.brown, .orange], description: "Calm endurance"),
+      ]
+    ),
   ]
 
   var body: some View {

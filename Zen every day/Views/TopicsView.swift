@@ -65,6 +65,46 @@ struct TopicsView: View {
       gradient: [.mint, .teal],
       description: "Calmness and serenity"
     ),
+    TopicItem(
+      name: "Generosity",
+      keyword: "generosity",
+      icon: "hands.sparkles.fill",
+      color: .mint,
+      gradient: [.mint, .green],
+      description: "Joy of giving",
+    ),
+    TopicItem(
+      name: "Equanimity",
+      keyword: "equanimity",
+      icon: "yinyang",
+      color: .teal,
+      gradient: [.teal, .blue],
+      description: "Balanced mind in all conditions",
+    ),
+    TopicItem(
+      name: "Patience",
+      keyword: "patience",
+      icon: "hourglass",
+      color: .brown,
+      gradient: [.brown, .orange],
+      description: "Calm endurance through challenges",
+    ),
+    TopicItem(
+      name: "Non-Attachment",
+      keyword: "non-attachment",
+      icon: "scissors",
+      color: .indigo,
+      gradient: [.indigo, .blue],
+      description: "Letting go of clinging",
+    ),
+    TopicItem(
+      name: "Joy",
+      keyword: "joy",
+      icon: "face.smiling",
+      color: .pink,
+      gradient: [.pink, .orange],
+      description: "Cultivating gladness",
+    ),
   ]
 
   let columns = [
