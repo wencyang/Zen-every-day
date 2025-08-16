@@ -102,7 +102,9 @@ struct QuoteHistoryCard: View {
 
   private var quote: WisdomQuote {
     WisdomQuote(
-      id: entry.id,
+      // Use the original quote identifier when available to avoid
+      // saving the same quote multiple times.
+      id: entry.quoteId ?? entry.text,
       author: entry.author,
       text: entry.text,
       work: nil,
