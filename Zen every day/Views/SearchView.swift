@@ -56,14 +56,11 @@ struct SearchView: View {
     SearchTopicItem(text: "impermanence", emoji: "🍃", color: .orange.opacity(0.1), textColor: .orange),
     SearchTopicItem(text: "wisdom", emoji: "🕯", color: .purple.opacity(0.1), textColor: .purple),
     SearchTopicItem(text: "suffering", emoji: "😌", color: .blue.opacity(0.1), textColor: .blue),
-    SearchTopicItem(text: "emptiness", emoji: "🌌", color: .indigo.opacity(0.1), textColor: .indigo),
   ]
 
   // Popular phrases that people often search for
   let popularPhrases = [
-    "noble eightfold path", "four noble truths", "mindful breathing",
-    "loving kindness", "middle way", "right action", "impermanence",
-    "non-self", "bodhisattva",
+    "middle way", "right action", "impermanence",
   ]
 
   var body: some View {
@@ -291,25 +288,25 @@ struct SearchView: View {
                 VStack(alignment: .leading, spacing: 8) {
                   SearchTipRow(
                     icon: "doc.text.magnifyingglass",
-                    tip: "Search for specific words like \"shepherd\" or \"righteousness\"",
+                    tip: "Search for specific words like \"mindfulness\" or \"compassion\"",
                     color: .blue
                   )
 
                   SearchTipRow(
                     icon: "quote.bubble",
-                    tip: "Try phrases in quotes like \"fear not\" or \"be still\"",
+                    tip: "Try phrases in quotes like \"middle way\" or \"right action\"",
                     color: .green
                   )
 
                   SearchTipRow(
                     icon: "person.fill",
-                    tip: "Search for people like \"David\", \"Moses\", or \"Paul\"",
+                    tip: "Search for teachers like \"Buddha\", \"Dogen\", or \"Hakuin\"",
                     color: .purple
                   )
 
                   SearchTipRow(
                     icon: "location.fill",
-                    tip: "Find places like \"Jerusalem\", \"Egypt\", or \"Galilee\"",
+                    tip: "Explore concepts like \"impermanence\" or \"suffering\"",
                     color: .red
                   )
                 }
@@ -471,7 +468,8 @@ struct SearchView: View {
     DispatchQueue.global(qos: .userInitiated).async {
       let searchResults = self.wisdomManager.quotes.filter { quote in
         quote.text.localizedCaseInsensitiveContains(searchQuery) ||
-          (quote.author?.localizedCaseInsensitiveContains(searchQuery) ?? false)
+          (quote.author?.localizedCaseInsensitiveContains(searchQuery) ?? false) ||
+          (quote.tags?.contains { $0.localizedCaseInsensitiveContains(searchQuery) } ?? false)
       }
 
       DispatchQueue.main.async {
