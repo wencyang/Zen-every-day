@@ -21,6 +21,14 @@ struct MoreView: View {
               )
 
               NavigationLinkRow(
+                title: "Saved Quotes",
+                subtitle: "Your favorite wisdom",
+                icon: "quote.bubble.fill",
+                iconColor: .teal,
+                destination: SavedQuotesView()
+              )
+
+              NavigationLinkRow(
                 title: "Verse of the Day",
                 subtitle: "Daily verse history",
                 icon: "calendar.badge.clock",

@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // Topic model for the detail view (keeping original structure for compatibility)
 struct Topic: Identifiable, Hashable {
@@ -23,6 +24,7 @@ struct TopicDetailView: View {
   @State private var errorMessage: String?
 
   @EnvironmentObject var settings: UserSettings
+  @EnvironmentObject var savedQuotesManager: SavedQuotesManager
 
   // Reference to wisdom manager
   private let wisdomManager = WisdomManager.shared
@@ -122,22 +124,33 @@ struct TopicDetailView: View {
 
                   HStack {
                     Spacer()
-                    Button(action: {
-                      var copyText = quote.text
-                      if let author = quote.author?.removingParaphrase {
-                        copyText += "\n- \(author)"
+                    HStack(spacing: 8) {
+                      Button(action: {
+                        savedQuotesManager.toggleQuoteSaved(quote)
+                      }) {
+                        Image(systemName: savedQuotesManager.isQuoteSaved(quote) ? "bookmark.fill" : "bookmark")
+                          .font(.system(size: 16))
+                          .foregroundColor(savedQuotesManager.isQuoteSaved(quote) ? .blue : .secondary)
                       }
-                      if let work = quote.work?.removingParaphrase, !work.isEmpty {
-                        copyText += ", \(work)"
+                      .buttonStyle(PlainButtonStyle())
+
+                      Button(action: {
+                        var copyText = quote.text
+                        if let author = quote.author?.removingParaphrase {
+                          copyText += "\n- \(author)"
+                        }
+                        if let work = quote.work?.removingParaphrase, !work.isEmpty {
+                          copyText += ", \(work)"
+                        }
+                        UIPasteboard.general.string = copyText
+                        showCopyToast = true
+                      }) {
+                        Image(systemName: "doc.on.doc")
+                          .font(.system(size: 16))
+                          .foregroundColor(.blue)
                       }
-                      UIPasteboard.general.string = copyText
-                      showCopyToast = true
-                    }) {
-                      Image(systemName: "doc.on.doc")
-                        .font(.system(size: 16))
-                        .foregroundColor(.blue)
+                      .buttonStyle(PlainButtonStyle())
                     }
-                    .buttonStyle(PlainButtonStyle())
                   }
                 }
                 .padding()
@@ -166,6 +179,18 @@ struct TopicDetailView: View {
       icon: "doc.on.doc.fill",
       color: .green,
       duration: 1.2
+    )
+    .toast(
+      isShowing: $savedQuotesManager.showSavedToast,
+      message: "Quote Saved",
+      icon: "bookmark.fill",
+      color: .blue
+    )
+    .toast(
+      isShowing: $savedQuotesManager.showRemovedToast,
+      message: "Bookmark Removed",
+      icon: "bookmark.slash.fill",
+      color: .red
     )
     .onAppear {
       loadTopicQuotes()

@@ -13,6 +13,7 @@ struct ZenEveryDayApp: App {
   @StateObject var settings = UserSettings()
   @StateObject var activityManager = ReadingActivityManager()
   @StateObject var savedVersesManager = SavedVersesManager()
+  @StateObject var savedQuotesManager = SavedQuotesManager()
   @StateObject var notificationManager = NotificationManager()
   @StateObject var backgroundManager = BackgroundImageManager()
   @StateObject var musicManager = BackgroundMusicManager.shared
@@ -30,6 +31,7 @@ struct ZenEveryDayApp: App {
           .environmentObject(settings)
           .environmentObject(activityManager)
           .environmentObject(savedVersesManager)
+          .environmentObject(savedQuotesManager)
           .environmentObject(notificationManager)
           .environmentObject(backgroundManager)
           .environmentObject(musicManager)
