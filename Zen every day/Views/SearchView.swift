@@ -440,18 +440,6 @@ struct SearchView: View {
       color: .green,
       duration: 1.2
     )
-    .toast(
-      isShowing: $savedQuotesManager.showSavedToast,
-      message: "Quote Saved",
-      icon: "bookmark.fill",
-      color: .blue
-    )
-    .toast(
-      isShowing: $savedQuotesManager.showRemovedToast,
-      message: "Bookmark Removed",
-      icon: "bookmark.slash.fill",
-      color: .red
-    )
   }
 
   func performSearch() {
