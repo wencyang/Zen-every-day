@@ -385,7 +385,7 @@ struct MeditationSetupView: View {
             .padding(.vertical, 6)
             .background(
                 Capsule()
-                    .fill(isSelected ? Color.tint : Color.gray.opacity(0.2))
+                    .fill(isSelected ? Color.accentColor : Color.gray.opacity(0.2))
             )
             .foregroundColor(isSelected ? .white : .primary)
     }
@@ -565,6 +565,10 @@ struct SoundPickerView: View {
     @Environment(\.presentationMode) private var presentationMode
     @State private var playingSample: MeditationSession.AmbientSound? = nil
     private var samplePlayer: AVAudioPlayer? = nil
+
+    init(session: MeditationSession) {
+        self.session = session
+    }
     
     var body: some View {
         NavigationView {
