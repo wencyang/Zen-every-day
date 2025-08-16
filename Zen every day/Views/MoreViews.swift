@@ -21,11 +21,11 @@ struct MoreView: View {
               )
 
               NavigationLinkRow(
-                title: "Verse of the Day",
-                subtitle: "Daily verse history",
+                title: "Quote of the Day",
+                subtitle: "Daily quote history",
                 icon: "calendar.badge.clock",
                 iconColor: .orange,
-                destination: VerseOfTheDayView()
+                destination: QuoteOfTheDayView()
               )
 
               NavigationLinkRow(

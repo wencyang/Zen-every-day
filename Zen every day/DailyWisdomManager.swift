@@ -31,10 +31,33 @@ class DailyWisdomManager: ObservableObject {
         formatter.dateFormat = "yyyy-MM-dd"
         let todayString = formatter.string(from: Date())
         let index = stableHash(todayString) % quotes.count
-        dailyQuote = quotes[index]
+        let quote = quotes[index]
+        dailyQuote = quote
+        saveToHistory(quote)
     }
 
     private func stableHash(_ s: String) -> Int {
         return s.unicodeScalars.map { Int($0.value) }.reduce(0, +)
+    }
+
+    private func saveToHistory(_ quote: WisdomQuote) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let today = formatter.string(from: Date())
+
+        var history: [DailyQuoteEntry] = []
+        if let data = UserDefaults.standard.data(forKey: "dailyQuoteHistory"),
+           let decoded = try? JSONDecoder().decode([DailyQuoteEntry].self, from: data) {
+            history = decoded
+        }
+
+        if !history.contains(where: { $0.date == today }) {
+            let entry = DailyQuoteEntry(date: today, author: quote.author, text: quote.text)
+            history.append(entry)
+            if history.count > 30 { history = Array(history.suffix(30)) }
+            if let encoded = try? JSONEncoder().encode(history) {
+                UserDefaults.standard.set(encoded, forKey: "dailyQuoteHistory")
+            }
+        }
     }
 }
