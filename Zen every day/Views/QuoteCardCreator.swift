@@ -135,7 +135,7 @@ struct QuoteCardCreator: View {
 
   private func saveToPhotos() {
     generateCard { image in
-      PHPhotoLibrary.requestAuthorization { status in
+      PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
         if status == .authorized || status == .limited {
           UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
           DispatchQueue.main.async {
