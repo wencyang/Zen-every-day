@@ -58,12 +58,14 @@ class SavedQuotesManager: ObservableObject {
     if let index = savedQuotes.firstIndex(where: { $0.text == quote.text && $0.author == quote.author }) {
       if savedQuotes[index].id != quote.id {
         savedIDs.remove(savedQuotes[index].id)
+        let photoName = UserDefaults.standard.string(forKey: "backgroundPhotoName")
         savedQuotes[index] = SavedQuote(
           id: quote.id,
           author: quote.author,
           text: quote.text,
           work: quote.work,
-          dateSaved: savedQuotes[index].dateSaved
+          dateSaved: savedQuotes[index].dateSaved,
+          backgroundPhotoName: photoName
         )
         savedIDs.insert(quote.id)
         persistSavedQuotes()
