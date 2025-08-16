@@ -109,9 +109,14 @@ struct TopicDetailView: View {
                     fontSize: settings.fontSize
                   )
 
-                  if let author = quote.author {
+                  if let author = quote.author?.removingParaphrase {
                     Text(author)
                       .font(.caption)
+                      .foregroundColor(.secondary)
+                  }
+                  if let work = quote.work?.removingParaphrase, !work.isEmpty {
+                    Text(work)
+                      .font(.caption2)
                       .foregroundColor(.secondary)
                   }
 
@@ -119,8 +124,11 @@ struct TopicDetailView: View {
                     Spacer()
                     Button(action: {
                       var copyText = quote.text
-                      if let author = quote.author {
+                      if let author = quote.author?.removingParaphrase {
                         copyText += "\n- \(author)"
+                      }
+                      if let work = quote.work?.removingParaphrase, !work.isEmpty {
+                        copyText += ", \(work)"
                       }
                       UIPasteboard.general.string = copyText
                       showCopyToast = true
@@ -176,7 +184,13 @@ struct TopicDetailView: View {
 
     DispatchQueue.global(qos: .userInitiated).async {
       let filtered = wisdomManager.quotes.filter { quote in
-        quote.text.localizedCaseInsensitiveContains(self.topic.keyword)
+        if let tags = quote.tags,
+          tags.contains(where: {
+            $0.caseInsensitiveCompare(self.topic.keyword) == .orderedSame
+          }) {
+          return true
+        }
+        return quote.text.localizedCaseInsensitiveContains(self.topic.keyword)
       }
 
       let searchResults = Array(filtered.prefix(100))

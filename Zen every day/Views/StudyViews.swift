@@ -18,12 +18,6 @@ struct TopicalStudyView: View {
       color: .orange,
       topics: [
         TopicItem(
-          name: "Four Noble Truths", keyword: "four noble truths", icon: "4.square.fill", color: .orange,
-          gradient: [.orange, .yellow], description: "Understanding suffering and its cessation"),
-        TopicItem(
-          name: "Noble Eightfold Path", keyword: "eightfold", icon: "8.square.fill", color: .blue,
-          gradient: [.blue, .indigo], description: "The path to liberation"),
-        TopicItem(
           name: "Impermanence", keyword: "impermanence", icon: "clock", color: .pink,
           gradient: [.pink, .purple], description: "All things change"),
       ]
