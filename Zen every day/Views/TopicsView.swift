@@ -71,7 +71,7 @@ struct TopicsView: View {
       icon: "hands.sparkles.fill",
       color: .mint,
       gradient: [.mint, .green],
-      description: "Joy of giving",
+      description: "Joy of giving"
     ),
     TopicItem(
       name: "Equanimity",
@@ -79,7 +79,7 @@ struct TopicsView: View {
       icon: "yinyang",
       color: .teal,
       gradient: [.teal, .blue],
-      description: "Balanced mind in all conditions",
+      description: "Balanced mind in all conditions"
     ),
     TopicItem(
       name: "Patience",
@@ -87,7 +87,7 @@ struct TopicsView: View {
       icon: "hourglass",
       color: .brown,
       gradient: [.brown, .orange],
-      description: "Calm endurance through challenges",
+      description: "Calm endurance through challenges"
     ),
     TopicItem(
       name: "Non-Attachment",
@@ -95,7 +95,7 @@ struct TopicsView: View {
       icon: "scissors",
       color: .indigo,
       gradient: [.indigo, .blue],
-      description: "Letting go of clinging",
+      description: "Letting go of clinging"
     ),
     TopicItem(
       name: "Joy",
@@ -103,7 +103,7 @@ struct TopicsView: View {
       icon: "face.smiling",
       color: .pink,
       gradient: [.pink, .orange],
-      description: "Cultivating gladness",
+      description: "Cultivating gladness"
     ),
   ]
 
