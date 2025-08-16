@@ -52,7 +52,12 @@ class DailyWisdomManager: ObservableObject {
         }
 
         if !history.contains(where: { $0.date == today }) {
-            let entry = DailyQuoteEntry(date: today, author: quote.author, text: quote.text)
+            let entry = DailyQuoteEntry(
+                date: today,
+                author: quote.author,
+                text: quote.text,
+                quoteId: quote.id
+            )
             history.append(entry)
             if history.count > 30 { history = Array(history.suffix(30)) }
             if let encoded = try? JSONEncoder().encode(history) {

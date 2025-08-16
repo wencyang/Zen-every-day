@@ -24,8 +24,22 @@ class SavedQuotesManager: ObservableObject {
   private func loadSavedQuotes() {
     if let data = UserDefaults.standard.data(forKey: savedQuotesKey),
        let decoded = try? JSONDecoder().decode([SavedQuote].self, from: data) {
-      savedQuotes = decoded
-      savedIDs = Set(decoded.map { $0.id })
+      // Remove any duplicate entries that might have been saved
+      // before the duplicate check was added.
+      var uniqueQuotes: [String: SavedQuote] = [:]
+      for quote in decoded {
+        if uniqueQuotes[quote.id] == nil {
+          uniqueQuotes[quote.id] = quote
+        }
+      }
+
+      savedQuotes = Array(uniqueQuotes.values)
+      savedIDs = Set(uniqueQuotes.keys)
+
+      // Persist cleaned list if duplicates were removed
+      if uniqueQuotes.count != decoded.count {
+        persistSavedQuotes()
+      }
     }
   }
 
