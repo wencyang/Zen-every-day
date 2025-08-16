@@ -4,7 +4,22 @@ import SwiftUI
 /// When `true`, the background will only change once per day.
 
 class BackgroundImageManager: ObservableObject {
+    /// Indicates whether a background image should be displayed.
+    @Published var showBackground: Bool = true
+
+    /// The name of the current photo in the asset catalog.
     @Published var currentPhotoName: String = "photo1"
+
+    /// Provides a `UIImage` for the current photo, if available.
+    var currentBackgroundImage: UIImage? {
+        if let image = UIImage(named: currentPhotoName) {
+            return image
+        } else if let dataAsset = NSDataAsset(name: currentPhotoName) {
+            return UIImage(data: dataAsset.data)
+        }
+        return nil
+    }
+
     private let photoNames: [String]
 
     @AppStorage("backgroundPhotoName") private var storedPhotoName: String = "photo1"

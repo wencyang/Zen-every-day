@@ -521,18 +521,6 @@ struct ReflectionEntry: Codable, Identifiable {
     let date: Date
 }
 
-// MARK: - Share Sheet
-struct ShareSheet: UIViewControllerRepresentable {
-    let items: [Any]
-    
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        return controller
-    }
-    
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
-
 // MARK: - Floating Quote View (for Daily Wisdom)
 struct FloatingQuoteView: View {
     let quote: WisdomQuote
