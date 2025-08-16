@@ -76,7 +76,34 @@ struct SavedQuotesView: View {
                 .buttonStyle(PlainButtonStyle())
               }
             }
-            .padding(.vertical, 4)
+            .padding()
+            .background(
+              Group {
+                if let name = saved.backgroundPhotoName {
+                  if let image = UIImage(named: name) {
+                    Image(uiImage: image)
+                      .resizable()
+                      .scaledToFill()
+                      .overlay(Color.black.opacity(0.2))
+                  } else if
+                    let dataAsset = NSDataAsset(name: name),
+                    let image = UIImage(data: dataAsset.data)
+                  {
+                    Image(uiImage: image)
+                      .resizable()
+                      .scaledToFill()
+                      .overlay(Color.black.opacity(0.2))
+                  } else {
+                    Color(.secondarySystemGroupedBackground)
+                  }
+                } else {
+                  Color(.secondarySystemGroupedBackground)
+                }
+              }
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+            .listRowSeparator(.hidden)
             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
               Button(role: .destructive) {
                 savedQuotesManager.removeSavedQuote(saved)
