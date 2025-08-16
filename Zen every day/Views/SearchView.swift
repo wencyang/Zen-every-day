@@ -44,6 +44,7 @@ struct SearchView: View {
   @State private var showCopyToast = false
 
   @EnvironmentObject var settings: UserSettings
+  @EnvironmentObject var savedQuotesManager: SavedQuotesManager
 
   // Use singleton wisdom manager
   private var wisdomManager = WisdomManager.shared
@@ -382,20 +383,30 @@ struct SearchView: View {
 
                 Spacer()
 
-                // Copy button
-                Button(action: {
-                  var copyText = quote.text
-                  if let author = quote.author {
-                    copyText += "\n- \(author)"
+                HStack(spacing: 8) {
+                  Button(action: {
+                    savedQuotesManager.toggleQuoteSaved(quote)
+                  }) {
+                    Image(systemName: savedQuotesManager.isQuoteSaved(quote) ? "bookmark.fill" : "bookmark")
+                      .font(.system(size: 16))
+                      .foregroundColor(savedQuotesManager.isQuoteSaved(quote) ? .blue : .secondary)
                   }
-                  UIPasteboard.general.string = copyText
-                  showCopyToast = true
-                }) {
-                  Image(systemName: "doc.on.doc")
-                    .font(.system(size: 16))
-                    .foregroundColor(.blue)
+                  .buttonStyle(PlainButtonStyle())
+
+                  Button(action: {
+                    var copyText = quote.text
+                    if let author = quote.author {
+                      copyText += "\n- \(author)"
+                    }
+                    UIPasteboard.general.string = copyText
+                    showCopyToast = true
+                  }) {
+                    Image(systemName: "doc.on.doc")
+                      .font(.system(size: 16))
+                      .foregroundColor(.blue)
+                  }
+                  .buttonStyle(PlainButtonStyle())
                 }
-                .buttonStyle(PlainButtonStyle())
               }
               .padding(.vertical, 4)
               .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
@@ -431,6 +442,18 @@ struct SearchView: View {
       icon: "doc.on.doc.fill",
       color: .green,
       duration: 1.2
+    )
+    .toast(
+      isShowing: $savedQuotesManager.showSavedToast,
+      message: "Quote Saved",
+      icon: "bookmark.fill",
+      color: .blue
+    )
+    .toast(
+      isShowing: $savedQuotesManager.showRemovedToast,
+      message: "Bookmark Removed",
+      icon: "bookmark.slash.fill",
+      color: .red
     )
   }
 

@@ -4,6 +4,7 @@ struct ContentView: View {
   @EnvironmentObject var settings: UserSettings
   @EnvironmentObject var musicManager: BackgroundMusicManager
   @EnvironmentObject var backgroundManager: BackgroundImageManager
+  @EnvironmentObject var savedQuotesManager: SavedQuotesManager
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   @StateObject var dailyWisdomManager = DailyWisdomManager()
 
@@ -76,6 +77,16 @@ struct ContentView: View {
                     Text(author)
                       .font(.system(size: settings.fontSize * 0.9))
                       .foregroundColor(.white)
+                  }
+
+                  Button(action: {
+                    savedQuotesManager.toggleQuoteSaved(quote)
+                  }) {
+                    Image(systemName: savedQuotesManager.isQuoteSaved(quote) ? "bookmark.fill" : "bookmark")
+                      .font(.title2)
+                      .foregroundColor(.white)
+                      .padding(8)
+                      .background(Color.black.opacity(0.5).clipShape(Circle()))
                   }
                 }
                 .padding(.horizontal)
@@ -156,6 +167,18 @@ struct ContentView: View {
     .onChange(of: musicVolume) { _ , _ in
       musicManager.updateVolume()
     }
+    .toast(
+      isShowing: $savedQuotesManager.showSavedToast,
+      message: "Quote Saved",
+      icon: "bookmark.fill",
+      color: .blue
+    )
+    .toast(
+      isShowing: $savedQuotesManager.showRemovedToast,
+      message: "Bookmark Removed",
+      icon: "bookmark.slash.fill",
+      color: .red
+    )
   }
 
   // MARK: - Helper Methods
