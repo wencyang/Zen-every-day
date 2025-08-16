@@ -25,16 +25,23 @@ class SavedQuotesManager: ObservableObject {
     if let data = UserDefaults.standard.data(forKey: savedQuotesKey),
        let decoded = try? JSONDecoder().decode([SavedQuote].self, from: data) {
       // Remove any duplicate entries that might have been saved
-      // before the duplicate check was added.
+      // before the duplicate check was added. This also merges
+      // entries that used the quote text as their identifier.
       var uniqueQuotes: [String: SavedQuote] = [:]
       for quote in decoded {
-        if uniqueQuotes[quote.id] == nil {
-          uniqueQuotes[quote.id] = quote
+        let key = "\(quote.text)|\(quote.author ?? "")"
+        if let existing = uniqueQuotes[key] {
+          // Prefer the entry that has a proper id (not just the text)
+          if existing.id == existing.text && quote.id != quote.text {
+            uniqueQuotes[key] = quote
+          }
+        } else {
+          uniqueQuotes[key] = quote
         }
       }
 
       savedQuotes = Array(uniqueQuotes.values)
-      savedIDs = Set(uniqueQuotes.keys)
+      savedIDs = Set(savedQuotes.map { $0.id })
 
       // Persist cleaned list if duplicates were removed
       if uniqueQuotes.count != decoded.count {
@@ -44,7 +51,26 @@ class SavedQuotesManager: ObservableObject {
   }
 
   func saveQuote(_ quote: WisdomQuote) {
-    guard !isQuoteSaved(quote) else { return }
+    // If a quote with the same text and author already exists but
+    // uses a different identifier (older versions stored the text as
+    // the identifier), update it instead of creating a duplicate.
+    if let index = savedQuotes.firstIndex(where: { $0.text == quote.text && $0.author == quote.author }) {
+      if savedQuotes[index].id != quote.id {
+        savedIDs.remove(savedQuotes[index].id)
+        savedQuotes[index] = SavedQuote(
+          id: quote.id,
+          author: quote.author,
+          text: quote.text,
+          work: quote.work,
+          dateSaved: savedQuotes[index].dateSaved
+        )
+        savedIDs.insert(quote.id)
+        persistSavedQuotes()
+      }
+      return
+    }
+
+    guard !savedIDs.contains(quote.id) else { return }
 
     let savedQuote = SavedQuote(
       id: quote.id,
@@ -72,8 +98,9 @@ class SavedQuotesManager: ObservableObject {
   func removeQuote(_ quote: WisdomQuote) {
     guard isQuoteSaved(quote) else { return }
 
-    savedQuotes.removeAll { $0.id == quote.id }
-    savedIDs.remove(quote.id)
+    let removed = savedQuotes.filter { $0.id == quote.id || ($0.text == quote.text && $0.author == quote.author) }
+    savedQuotes.removeAll { $0.id == quote.id || ($0.text == quote.text && $0.author == quote.author) }
+    removed.forEach { savedIDs.remove($0.id) }
 
     DispatchQueue.main.async {
       let impactFeedback = UIImpactFeedbackGenerator(style: .light)
@@ -99,7 +126,11 @@ class SavedQuotesManager: ObservableObject {
   }
 
   func isQuoteSaved(_ quote: WisdomQuote) -> Bool {
-    savedIDs.contains(quote.id)
+    if savedIDs.contains(quote.id) {
+      return true
+    }
+    // Fallback to text/author match for quotes saved by older app versions
+    return savedQuotes.contains { $0.text == quote.text && $0.author == quote.author }
   }
 
   func toggleQuoteSaved(_ quote: WisdomQuote) {
