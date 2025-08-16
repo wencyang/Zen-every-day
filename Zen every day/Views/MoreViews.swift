@@ -13,14 +13,6 @@ struct MoreView: View {
           SectionContainer(title: "Personal", icon: "person.circle") {
             VStack(spacing: 8) {
               NavigationLinkRow(
-                title: "Bookmarks",
-                subtitle: "Your saved verses",
-                icon: "bookmark.fill",
-                iconColor: .blue,
-                destination: SavedView()
-              )
-
-              NavigationLinkRow(
                 title: "Saved Quotes",
                 subtitle: "Your favorite wisdom",
                 icon: "quote.bubble.fill",
