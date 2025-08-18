@@ -285,7 +285,7 @@ extension TopicItem {
 
 struct TopicsView_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView {
+    NavigationStack {
       TopicsView()
         .environmentObject(UserSettings())
     }

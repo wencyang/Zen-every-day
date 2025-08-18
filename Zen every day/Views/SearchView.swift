@@ -541,7 +541,7 @@ struct ScaleButtonStyle: ButtonStyle {
 
 struct SearchView_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView {
+    NavigationStack {
       SearchView()
         .environmentObject(UserSettings())
     }

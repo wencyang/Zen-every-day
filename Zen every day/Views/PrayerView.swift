@@ -438,7 +438,7 @@ struct PrayerCard: View {
 
 struct PrayerView_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView {
+    NavigationStack {
       PrayerView()
         .environmentObject(UserSettings())
     }

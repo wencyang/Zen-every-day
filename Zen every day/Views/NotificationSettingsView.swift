@@ -93,7 +93,7 @@ struct TimePickerSheet: View {
   }
 
   var body: some View {
-    NavigationView {
+    NavigationStack {
       VStack {
         Text("Choose a time to receive your daily quote")
           .font(.headline)
@@ -128,7 +128,7 @@ struct TimePickerSheet: View {
 
 struct NotificationSettingsView_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView {
+    NavigationStack {
       NotificationSettingsView()
         .environmentObject(UserSettings())
     }

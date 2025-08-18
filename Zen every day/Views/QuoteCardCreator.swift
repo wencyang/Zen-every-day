@@ -18,7 +18,7 @@ struct QuoteCardCreator: View {
   }
 
   var body: some View {
-    NavigationView {
+    NavigationStack {
       VStack(spacing: 0) {
         ScrollView {
           VStack(spacing: 12) {

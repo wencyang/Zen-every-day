@@ -161,7 +161,7 @@ struct SectionHeader: View {
 
 struct AboutView_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView {
+    NavigationStack {
       AboutView()
         .environmentObject(UserSettings())
     }
