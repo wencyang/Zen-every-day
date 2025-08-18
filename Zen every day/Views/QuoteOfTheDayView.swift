@@ -238,7 +238,7 @@ struct QuoteHistoryCard: View {
 
 struct QuoteOfTheDayView_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView {
+    NavigationStack {
       QuoteOfTheDayView()
         .environmentObject(UserSettings())
         .environmentObject(SavedQuotesManager())

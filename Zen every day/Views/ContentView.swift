@@ -36,7 +36,7 @@ struct ContentView: View {
                 .tag(0)
 
                 // Search Tab
-                NavigationView {
+                NavigationStack {
                     SearchView()
                 }
                 .tabItem {
@@ -132,7 +132,7 @@ struct HomeView: View {
     @State private var showingCalendar = false
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 24) {
                     // Streak display
@@ -417,7 +417,7 @@ struct ExploreView: View {
             if selectedSection == 0 {
                 DiscoverExploreView()
             } else if selectedSection == 1 {
-                NavigationView {
+                NavigationStack {
                     SearchView()
                 }
             } else {
@@ -450,7 +450,7 @@ struct DiscoverExploreView: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 0) {
                 // Search bar
                 HStack {

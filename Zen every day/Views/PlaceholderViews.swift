@@ -3,7 +3,7 @@ import SwiftUI
 // Placeholder view wrapping existing SavedQuotesView
 struct SavedView: View {
     var body: some View {
-        NavigationView {
+        NavigationStack {
             SavedQuotesView()
         }
     }
@@ -14,7 +14,7 @@ struct ProfileView: View {
     @ObservedObject var streakManager: StreakManager
     @ObservedObject var prayerManager: PrayerManager
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section(header: Text("Stats")) {
                     Text("Current streak: \(streakManager.currentStreak) days")
@@ -83,7 +83,7 @@ struct CalendarView: View {
 struct JournalView: View {
     @State private var text: String = ""
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(alignment: .leading) {
                 TextEditor(text: $text)
                     .padding()

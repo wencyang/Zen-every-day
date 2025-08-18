@@ -524,7 +524,7 @@ struct DurationPickerView: View {
     @State private var selectedMinutes: Int = 5
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 Picker("Duration", selection: $selectedMinutes) {
                     ForEach(1...60, id: \.self) { minute in
@@ -571,7 +571,7 @@ struct SoundPickerView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ForEach(MeditationSession.AmbientSound.allCases, id: \.self) { sound in
                     Button(action: {

@@ -273,7 +273,7 @@ struct HighlightedQuoteText: View {
 
 struct TopicDetailView_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView {
+    NavigationStack {
       TopicDetailView(topic: Topic(name: "Faith", keyword: "faith"))
         .environmentObject(UserSettings())
     }

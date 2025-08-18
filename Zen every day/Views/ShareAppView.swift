@@ -322,7 +322,7 @@ struct ShareSheet: UIViewControllerRepresentable {
 
 struct ShareAppView_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView {
+    NavigationStack {
       ShareAppView()
         .environmentObject(UserSettings())
     }

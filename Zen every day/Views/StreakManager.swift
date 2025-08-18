@@ -611,7 +611,7 @@ struct AchievementsView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 0) {
                 // Category selector
                 ScrollView(.horizontal, showsIndicators: false) {

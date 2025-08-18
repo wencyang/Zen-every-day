@@ -156,7 +156,7 @@ struct FontSettingsView: View {
 
 struct SettingsView_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView {
+    NavigationStack {
       SettingsView()
     }
     .environmentObject(UserSettings())

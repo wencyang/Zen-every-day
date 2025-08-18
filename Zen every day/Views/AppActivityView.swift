@@ -431,7 +431,7 @@ struct StatCard: View {
 
 struct AppActivityView_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView {
+    NavigationStack {
       AppActivityView()
         .environmentObject(ReadingActivityManager())
         .environmentObject(UserSettings())
