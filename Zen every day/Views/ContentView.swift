@@ -31,7 +31,8 @@ struct ContentView: View {
                     meditateAction: startMeditation
                 )
                 .tabItem {
-                    Label("Today", systemImage: "sun.max.fill")
+                    Image(systemName: "sun.max.fill")
+                    Text("Today")
                 }
                 .tag(0)
 
@@ -40,7 +41,8 @@ struct ContentView: View {
                     SearchView()
                 }
                 .tabItem {
-                    Label("Search", systemImage: "magnifyingglass")
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
                 }
                 .tag(1)
 
@@ -49,21 +51,24 @@ struct ContentView: View {
                     StudyView()
                 }
                 .tabItem {
-                    Label("Study", systemImage: "book.fill")
+                    Image(systemName: "book.fill")
+                    Text("Study")
                 }
                 .tag(2)
 
                 // Meditation Tab
                 MeditationTimerView()
                     .tabItem {
-                        Label("Meditate", systemImage: "figure.mind.and.body")
+                        Image(systemName: "figure.mind.and.body")
+                        Text("Meditate")
                     }
                     .tag(3)
 
                 // Saved Tab
                 SavedView()
                     .tabItem {
-                        Label("Saved", systemImage: "bookmark.fill")
+                        Image(systemName: "bookmark.fill")
+                        Text("Saved")
                     }
                     .tag(4)
 
@@ -73,7 +78,8 @@ struct ContentView: View {
                     prayerManager: prayerManager
                 )
                 .tabItem {
-                    Label("Profile", systemImage: "person.circle.fill")
+                    Image(systemName: "person.circle.fill")
+                    Text("Profile")
                 }
                 .tag(5)
             }
