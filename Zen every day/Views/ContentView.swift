@@ -34,28 +34,39 @@ struct ContentView: View {
                     Label("Today", systemImage: "sun.max.fill")
                 }
                 .tag(0)
-                
-                // Explore Tab - Browse Quotes
-                ExploreView(streakManager: streakManager)
-                    .tabItem {
-                        Label("Explore", systemImage: "books.vertical")
-                    }
-                    .tag(1)
-                
+
+                // Search Tab
+                NavigationView {
+                    SearchView()
+                }
+                .tabItem {
+                    Label("Search", systemImage: "magnifyingglass")
+                }
+                .tag(1)
+
+                // Study Tab
+                NavigationStack {
+                    StudyView()
+                }
+                .tabItem {
+                    Label("Study", systemImage: "book.fill")
+                }
+                .tag(2)
+
                 // Meditation Tab
                 MeditationTimerView()
                     .tabItem {
                         Label("Meditate", systemImage: "figure.mind.and.body")
                     }
-                    .tag(2)
-                
+                    .tag(3)
+
                 // Saved Tab
                 SavedView()
                     .tabItem {
                         Label("Saved", systemImage: "bookmark.fill")
                     }
-                    .tag(3)
-                
+                    .tag(4)
+
                 // Profile Tab
                 ProfileView(
                     streakManager: streakManager,
@@ -64,7 +75,7 @@ struct ContentView: View {
                 .tabItem {
                     Label("Profile", systemImage: "person.circle.fill")
                 }
-                .tag(4)
+                .tag(5)
             }
             .accentColor(.blue)
             
@@ -108,7 +119,7 @@ struct ContentView: View {
     }
 
     private func startMeditation() {
-        selectedTab = 2
+        selectedTab = 3
     }
 }
 
