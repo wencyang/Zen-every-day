@@ -174,7 +174,16 @@ struct ContentView: View {
     .navigationViewStyle(.stack)
     .onAppear {
       showRandomPhoto()
-      musicManager.startIfNeeded()
+      if selectedTab != 2 {
+        musicManager.startIfNeeded()
+      }
+    }
+    .onChange(of: selectedTab) { _, newValue in
+      if newValue == 2 {
+        musicManager.pause()
+      } else {
+        musicManager.startIfNeeded()
+      }
     }
     .onChange(of: musicVolume) { _ , _ in
       musicManager.updateVolume()
