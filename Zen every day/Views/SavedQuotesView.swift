@@ -78,28 +78,7 @@ struct SavedQuotesView: View {
             }
             .padding()
             .background(
-              Group {
-                if let name = saved.backgroundPhotoName {
-                  if let image = UIImage(named: name) {
-                    Image(uiImage: image)
-                      .resizable()
-                      .scaledToFill()
-                      .overlay(Color.black.opacity(0.2))
-                  } else if
-                    let dataAsset = NSDataAsset(name: name),
-                    let image = UIImage(data: dataAsset.data)
-                  {
-                    Image(uiImage: image)
-                      .resizable()
-                      .scaledToFill()
-                      .overlay(Color.black.opacity(0.2))
-                  } else {
-                    Color(.secondarySystemGroupedBackground)
-                  }
-                } else {
-                  Color(.secondarySystemGroupedBackground)
-                }
-              }
+              DebugBackgroundImageView(photoName: saved.backgroundPhotoName, quoteText: String(saved.text.prefix(30)))
             )
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
@@ -127,6 +106,179 @@ struct SavedQuotesView: View {
       color: .green,
       duration: 1.2
     )
+    .onAppear {
+      // Update existing saved quotes that might not have backgrounds
+      savedQuotesManager.updateExistingSavedQuotesWithBackgrounds()
+    }
   }
 }
 
+// Debug version with extensive logging (fixed - no print in view builder)
+struct DebugBackgroundImageView: View {
+  let photoName: String?
+  let quoteText: String
+  
+  var body: some View {
+    Group {
+      if let photoName = photoName, !photoName.isEmpty {
+        // Method 1: Try UIImage(named:) - for images in main bundle
+        if let image = UIImage(named: photoName) {
+          Image(uiImage: image)
+            .resizable()
+            .scaledToFill()
+            .overlay(Color.black.opacity(0.2))
+            .onAppear {
+              print("✅ [\(quoteText)] SUCCESS with UIImage(named:) for \(photoName)")
+            }
+        }
+        // Method 2: Try NSDataAsset - for images in asset catalog
+        else if let dataAsset = NSDataAsset(name: photoName),
+                let image = UIImage(data: dataAsset.data) {
+          Image(uiImage: image)
+            .resizable()
+            .scaledToFill()
+            .overlay(Color.black.opacity(0.2))
+            .onAppear {
+              print("✅ [\(quoteText)] SUCCESS with NSDataAsset for \(photoName)")
+            }
+        }
+        // Method 3: Try with different photo names as fallback
+        else if let fallbackImage = tryFallbackPhotos() {
+          Image(uiImage: fallbackImage)
+            .resizable()
+            .scaledToFill()
+            .overlay(Color.black.opacity(0.2))
+            .onAppear {
+              print("✅ [\(quoteText)] SUCCESS with fallback image")
+            }
+        }
+        // Method 4: Create a test gradient to confirm the view is working
+        else {
+          LinearGradient(
+            gradient: Gradient(colors: [
+              Color.blue.opacity(0.6),
+              Color.purple.opacity(0.6),
+              Color.pink.opacity(0.4)
+            ]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+          )
+          .overlay(
+            VStack {
+              Text("DEBUG")
+                .font(.caption)
+                .foregroundColor(.white)
+              Text(photoName)
+                .font(.caption2)
+                .foregroundColor(.white.opacity(0.8))
+            }
+          )
+          .onAppear {
+            print("❌ [\(quoteText)] ALL METHODS FAILED for \(photoName) - using gradient")
+          }
+        }
+      } else {
+        // No photo name - try default or show debug info
+        if let defaultImage = UIImage(named: "photo1") {
+          Image(uiImage: defaultImage)
+            .resizable()
+            .scaledToFill()
+            .overlay(Color.black.opacity(0.2))
+            .onAppear {
+              print("✅ [\(quoteText)] Using default photo1")
+            }
+        } else {
+          LinearGradient(
+            gradient: Gradient(colors: [
+              Color.orange.opacity(0.6),
+              Color.red.opacity(0.6)
+            ]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+          )
+          .overlay(
+            Text("NO PHOTO")
+              .font(.caption)
+              .foregroundColor(.white)
+          )
+          .onAppear {
+            print("❌ [\(quoteText)] No photoName provided and no default photo1 found")
+          }
+        }
+      }
+    }
+  }
+  
+  private func tryFallbackPhotos() -> UIImage? {
+    // Try common photo names
+    let fallbackNames = ["photo1", "photo2", "photo3", "photo4", "photo5"]
+    
+    for name in fallbackNames {
+      if let image = UIImage(named: name) {
+        print("📸 Found fallback image: \(name)")
+        return image
+      }
+      if let dataAsset = NSDataAsset(name: name),
+         let image = UIImage(data: dataAsset.data) {
+        print("📸 Found fallback NSDataAsset: \(name)")
+        return image
+      }
+    }
+    
+    print("📸 No fallback images found")
+    return nil
+  }
+}
+
+// Extension for SavedQuotesManager to update existing quotes
+extension SavedQuotesManager {
+    func updateExistingSavedQuotesWithBackgrounds() {
+        print("🔄 Updating existing saved quotes with backgrounds...")
+        var updated = false
+        
+        for i in 0..<savedQuotes.count {
+            if savedQuotes[i].backgroundPhotoName == nil || savedQuotes[i].backgroundPhotoName?.isEmpty == true {
+                // Generate a random background for quotes that don't have one
+                let newBackground = generateRandomPhotoName()
+                print("🔄 Updating quote \(i) with background: \(newBackground)")
+                
+                savedQuotes[i] = SavedQuote(
+                    id: savedQuotes[i].id,
+                    author: savedQuotes[i].author,
+                    text: savedQuotes[i].text,
+                    work: savedQuotes[i].work,
+                    dateSaved: savedQuotes[i].dateSaved,
+                    backgroundPhotoName: newBackground
+                )
+                updated = true
+            }
+        }
+        
+        if updated {
+            persistSavedQuotes()
+            objectWillChange.send()
+        }
+    }
+    
+    private func generateRandomPhotoName() -> String {
+        var names: [String] = []
+        var index = 1
+        while index <= 1000 {
+            let name = "photo\(index)"
+            if UIImage(named: name) != nil || NSDataAsset(name: name) != nil {
+                names.append(name)
+                index += 1
+            } else {
+                break
+            }
+        }
+        let photoNames = names.isEmpty ? ["photo1"] : names
+        return photoNames.randomElement() ?? "photo1"
+    }
+    
+    private func persistSavedQuotes() {
+        if let encoded = try? JSONEncoder().encode(savedQuotes) {
+            UserDefaults.standard.set(encoded, forKey: "savedQuotes")
+        }
+    }
+}

@@ -17,10 +17,25 @@ class SavedQuotesManager: ObservableObject {
 
   private let savedQuotesKey = "savedQuotes"
   private var savedIDs: Set<String> = []
-  @AppStorage("backgroundPhotoName") private var backgroundPhotoName: String = "photo1"
+  
+  // Reference to DailyWisdomManager to get current background
+  private weak var dailyWisdomManager: DailyWisdomManager?
 
-  init() {
+  init(dailyWisdomManager: DailyWisdomManager? = nil) {
+    self.dailyWisdomManager = dailyWisdomManager
     loadSavedQuotes()
+    
+    // Debug: Print what we have
+    print("=== SavedQuotesManager Debug ===")
+    print("Loaded \(savedQuotes.count) saved quotes")
+    for quote in savedQuotes {
+      print("Quote: \(quote.text.prefix(50))... | Background: \(quote.backgroundPhotoName ?? "nil")")
+    }
+  }
+  
+  // Method to set the daily wisdom manager reference
+  func setDailyWisdomManager(_ manager: DailyWisdomManager) {
+    self.dailyWisdomManager = manager
   }
 
   private func loadSavedQuotes() {
@@ -59,7 +74,8 @@ class SavedQuotesManager: ObservableObject {
     if let index = savedQuotes.firstIndex(where: { $0.text == quote.text && $0.author == quote.author }) {
       if savedQuotes[index].id != quote.id {
         savedIDs.remove(savedQuotes[index].id)
-        let photoName = backgroundPhotoName
+        let photoName = getCurrentBackgroundPhotoName()
+        print("Updating existing quote with background: \(photoName ?? "nil")")
         savedQuotes[index] = SavedQuote(
           id: quote.id,
           author: quote.author,
@@ -76,7 +92,9 @@ class SavedQuotesManager: ObservableObject {
 
     guard !savedIDs.contains(quote.id) else { return }
 
-    let photoName = backgroundPhotoName
+    let photoName = getCurrentBackgroundPhotoName()
+    print("Saving new quote with background: \(photoName ?? "nil")")
+    
     let savedQuote = SavedQuote(
       id: quote.id,
       author: quote.author,
@@ -152,5 +170,29 @@ class SavedQuotesManager: ObservableObject {
       UserDefaults.standard.set(encoded, forKey: savedQuotesKey)
     }
   }
+  
+  // Get the current background photo name from DailyWisdomManager
+  private func getCurrentBackgroundPhotoName() -> String? {
+    if let manager = dailyWisdomManager, let backgroundName = manager.backgroundPhotoName {
+      print("Got background from DailyWisdomManager: \(backgroundName)")
+      return backgroundName
+    }
+    
+    // Fallback: Generate a random photo name using the same logic as DailyWisdomManager
+    var names: [String] = []
+    var index = 1
+    while index <= 1000 {
+      let name = "photo\(index)"
+      if UIImage(named: name) != nil || NSDataAsset(name: name) != nil {
+        names.append(name)
+        index += 1
+      } else {
+        break
+      }
+    }
+    let photoNames = names.isEmpty ? ["photo1"] : names
+    let randomName = photoNames.randomElement() ?? "photo1"
+    print("Using fallback random background: \(randomName)")
+    return randomName
+  }
 }
-

@@ -16,6 +16,7 @@ struct ZenEveryDayApp: App {
   @StateObject var notificationManager = NotificationManager()
   @StateObject var backgroundManager = BackgroundImageManager()
   @StateObject var musicManager = BackgroundMusicManager.shared
+  @StateObject var dailyWisdomManager = DailyWisdomManager() // Added this
   @State private var isAppReady = false
 
   var body: some Scene {
@@ -33,6 +34,7 @@ struct ZenEveryDayApp: App {
           .environmentObject(notificationManager)
           .environmentObject(backgroundManager)
           .environmentObject(musicManager)
+          .environmentObject(dailyWisdomManager) // Added this
           .preferredColorScheme(colorScheme(for: appearanceMode))
           .onAppear {
               notificationManager.checkNotificationPermission()
@@ -81,6 +83,11 @@ struct ZenEveryDayApp: App {
   func prepareApp() {
     // Kick off heavy loading tasks in the background and show the interface
     WisdomManager.shared.loadWisdomIfNeeded()
+    
+    // Connect the managers so SavedQuotesManager can access DailyWisdomManager's background
+    savedQuotesManager.setDailyWisdomManager(dailyWisdomManager)
+    print("🔗 Connected DailyWisdomManager to SavedQuotesManager")
+    
     isAppReady = true
   }
 }
