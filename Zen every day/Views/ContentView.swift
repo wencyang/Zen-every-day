@@ -8,7 +8,7 @@ struct ContentView: View {
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
   @StateObject var dailyWisdomManager = DailyWisdomManager()
 
-  @State private var selectedTab = 0  // 0: Daily Quote, 1: Search, 2: Study, 3: More
+  @State private var selectedTab = 0  // 0: Daily Quote, 1: Study, 2: Meditation, 3: More
   @AppStorage("musicVolume") private var musicVolume: Double = 0.5
   @State private var showQuoteCard = false
 
@@ -144,22 +144,21 @@ struct ContentView: View {
         }
         .tag(0)
 
-      // 2) Search Tab
-      NavigationView {
-        SearchView()
-      }
-      .tabItem {
-        Label("Search", systemImage: "magnifyingglass")
-      }
-      .tag(1)
-
-      // 3) Study Tab
-
+      // 2) Study Tab (combines Study and Search)
       NavigationStack {
-        StudyView()
+        StudySearchView()
       }
       .tabItem {
         Label("Study", systemImage: "book.fill")
+      }
+      .tag(1)
+
+      // 3) Meditation Tab
+      NavigationStack {
+        MeditationView()
+      }
+      .tabItem {
+        Label("Meditation", systemImage: "leaf")
       }
       .tag(2)
 
