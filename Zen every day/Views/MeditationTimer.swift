@@ -404,9 +404,9 @@ struct ActiveMeditationView: View {
                 
                 // Breathing halo
                 Circle()
-                    .stroke(Color.white.opacity(0.3), lineWidth: 20)
+                    .stroke(Color.white.opacity(0.3), lineWidth: 40)
                     .frame(width: 280, height: 280)
-                    .scaleEffect(breathPhase ? 0.95 : 1.05)
+                    .scaleEffect(breathPhase ? 0.9 : 1.1)
                     .blur(radius: 10)
                     .animation(
                         .easeInOut(duration: 4)
@@ -440,14 +440,6 @@ struct ActiveMeditationView: View {
                         .foregroundColor(.secondary)
                 }
             }
-            
-            // Breathing guide
-            Text(breathPhase ? "Breathe In" : "Breathe Out")
-                .font(.title3)
-                .foregroundColor(.secondary)
-                .animation(.easeInOut(duration: 4), value: breathPhase)
-            
-            Spacer()
             
             // Control buttons
             HStack(spacing: 40) {
