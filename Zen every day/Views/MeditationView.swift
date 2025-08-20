@@ -3,7 +3,7 @@ import SwiftUI
 struct MeditationView: View {
     var body: some View {
         MeditationTimerView()
-            .navigationTitle("Meditation")
+            .navigationTitle("")
     }
 }
 
