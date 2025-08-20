@@ -120,11 +120,11 @@ struct QuoteCardCreator: View {
       )
       .onAppear {
         if backgroundImage == nil {
-          if let image = UIImage(named: backgroundManager.currentPhotoName) {
+          if let image = UIImage(named: backgroundManager.currentPhotoName)?.withRenderingMode(.alwaysOriginal) {
             backgroundImage = image
           } else if
             let dataAsset = NSDataAsset(name: backgroundManager.currentPhotoName),
-            let image = UIImage(data: dataAsset.data)
+            let image = UIImage(data: dataAsset.data)?.withRenderingMode(.alwaysOriginal)
           {
             backgroundImage = image
           }
