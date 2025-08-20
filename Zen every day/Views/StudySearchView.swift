@@ -18,7 +18,7 @@ struct StudySearchView: View {
                 SearchView()
             }
         }
-        .navigationTitle(selection == 0 ? "Study" : "Search")
+        .navigationTitle(selection == 0 ? "" : "Search")
     }
 }
 
