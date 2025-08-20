@@ -43,6 +43,13 @@ struct MoreView: View {
                 iconColor: .green,
                 destination: AppActivityView()
               )
+              NavigationLinkRow(
+                title: "Meditation History",
+                subtitle: "Track your sessions",
+                icon: "leaf.fill",
+                iconColor: .mint,
+                destination: MeditationHistoryView()
+              )
             }
           }
 

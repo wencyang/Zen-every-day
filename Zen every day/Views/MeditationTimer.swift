@@ -59,6 +59,7 @@ class MeditationSession: ObservableObject {
     ]
     
     func startMeditation() {
+        BackgroundMusicManager.shared.pause()
         isActive = true
         isPaused = false
         timeRemaining = duration
