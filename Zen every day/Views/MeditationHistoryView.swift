@@ -11,7 +11,7 @@ struct MeditationHistoryView: View {
             } else {
                 ForEach(sessions, id: \.date) { session in
                     VStack(alignment: .leading) {
-                        Text(session.date, style: .date)
+                        Text(session.date.formatted(date: .abbreviated, time: .shortened))
                             .font(.headline)
                         Text(formatDuration(session.duration))
                             .font(.subheadline)
