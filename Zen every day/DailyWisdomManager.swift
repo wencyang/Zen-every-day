@@ -1,13 +1,30 @@
 import Combine
 import SwiftUI
+import UIKit
 
 class DailyWisdomManager: ObservableObject {
     @Published var dailyQuote: WisdomQuote?
     @Published var errorMessage: String?
+    /// Name of the background image associated with today's quote.
+    @Published var backgroundPhotoName: String?
 
     private var cancellables = Set<AnyCancellable>()
+    private let photoNames: [String]
 
     init() {
+        var names: [String] = []
+        var index = 1
+        while index <= 1000 {
+            let name = "photo\(index)"
+            if UIImage(named: name) != nil || NSDataAsset(name: name) != nil {
+                names.append(name)
+                index += 1
+            } else {
+                break
+            }
+        }
+        self.photoNames = names.isEmpty ? ["photo1"] : names
+
         WisdomManager.shared.loadWisdomIfNeeded()
         WisdomManager.shared.$isLoaded
             .filter { $0 }
@@ -33,6 +50,7 @@ class DailyWisdomManager: ObservableObject {
         let index = stableHash(todayString) % quotes.count
         let quote = quotes[index]
         dailyQuote = quote
+        backgroundPhotoName = photoNames.randomElement()
         saveToHistory(quote)
     }
 
@@ -56,7 +74,8 @@ class DailyWisdomManager: ObservableObject {
                 date: today,
                 author: quote.author,
                 text: quote.text,
-                quoteId: quote.id
+                quoteId: quote.id,
+                backgroundPhotoName: backgroundPhotoName
             )
             history.append(entry)
             if history.count > 30 { history = Array(history.suffix(30)) }

@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct QuoteOfTheDayView: View {
   @State private var history: [DailyQuoteEntry] = []
@@ -184,10 +185,31 @@ struct QuoteHistoryCard: View {
       }
     }
     .background(
-      RoundedRectangle(cornerRadius: 16)
-        .fill(Color(.secondarySystemGroupedBackground))
-        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+      Group {
+        if let name = entry.backgroundPhotoName {
+          if let image = UIImage(named: name) {
+            Image(uiImage: image)
+              .resizable()
+              .scaledToFill()
+              .overlay(Color.black.opacity(0.2))
+          } else if
+            let dataAsset = NSDataAsset(name: name),
+            let image = UIImage(data: dataAsset.data)
+          {
+            Image(uiImage: image)
+              .resizable()
+              .scaledToFill()
+              .overlay(Color.black.opacity(0.2))
+          } else {
+            Color(.secondarySystemGroupedBackground)
+          }
+        } else {
+          Color(.secondarySystemGroupedBackground)
+        }
+      }
     )
+    .clipShape(RoundedRectangle(cornerRadius: 16))
+    .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
     .overlay(
       RoundedRectangle(cornerRadius: 16)
         .stroke(
