@@ -375,6 +375,7 @@ struct MeditationSetupView: View {
 struct ActiveMeditationView: View {
     @ObservedObject var session: MeditationSession
     @State private var breathPhase = false
+    private let breathTimer = Timer.publish(every: 4, on: .main, in: .common).autoconnect()
     
     var body: some View {
         VStack(spacing: 40) {
@@ -429,8 +430,7 @@ struct ActiveMeditationView: View {
                     .frame(width: 200, height: 200)
                     .scaleEffect(breathPhase ? 1.1 : 0.9)
                     .animation(
-                        .easeInOut(duration: 4)
-                        .repeatForever(autoreverses: true),
+                        .easeInOut(duration: 4),
                         value: breathPhase
                     )
                 
@@ -483,6 +483,9 @@ struct ActiveMeditationView: View {
         }
         .onAppear {
             breathPhase = true
+        }
+        .onReceive(breathTimer) { _ in
+            breathPhase.toggle()
         }
     }
     
