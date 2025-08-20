@@ -17,6 +17,7 @@ class SavedQuotesManager: ObservableObject {
 
   private let savedQuotesKey = "savedQuotes"
   private var savedIDs: Set<String> = []
+  @AppStorage("backgroundPhotoName") private var backgroundPhotoName: String = "photo1"
 
   init() {
     loadSavedQuotes()
@@ -58,7 +59,7 @@ class SavedQuotesManager: ObservableObject {
     if let index = savedQuotes.firstIndex(where: { $0.text == quote.text && $0.author == quote.author }) {
       if savedQuotes[index].id != quote.id {
         savedIDs.remove(savedQuotes[index].id)
-        let photoName = UserDefaults.standard.string(forKey: "backgroundPhotoName")
+        let photoName = backgroundPhotoName
         savedQuotes[index] = SavedQuote(
           id: quote.id,
           author: quote.author,
@@ -75,7 +76,7 @@ class SavedQuotesManager: ObservableObject {
 
     guard !savedIDs.contains(quote.id) else { return }
 
-    let photoName = UserDefaults.standard.string(forKey: "backgroundPhotoName")
+    let photoName = backgroundPhotoName
     let savedQuote = SavedQuote(
       id: quote.id,
       author: quote.author,

@@ -375,6 +375,7 @@ struct MeditationSetupView: View {
 struct ActiveMeditationView: View {
     @ObservedObject var session: MeditationSession
     @State private var breathPhase = false
+    private let breathTimer = Timer.publish(every: 4, on: .main, in: .common).autoconnect()
     
     var body: some View {
         VStack(spacing: 40) {
@@ -477,6 +478,9 @@ struct ActiveMeditationView: View {
         }
         .onAppear {
             breathPhase = true
+        }
+        .onReceive(breathTimer) { _ in
+            breathPhase.toggle()
         }
     }
     
