@@ -52,7 +52,8 @@ struct ContentView: View {
   }
 
   var body: some View {
-    TabView(selection: $selectedTab) {
+    ZStack {
+      TabView(selection: $selectedTab) {
       // 1) Daily Quote Tab
       NavigationView {
         ZStack {
@@ -128,10 +129,6 @@ struct ContentView: View {
               maxHeight: .infinity
             )
 
-            // Audio control button with custom styling
-            MusicControlButton(isPlaying: musicManager.isPlaying, action: musicManager.toggleAudio)
-              .padding(.bottom, 100) // Add padding to account for tab bar height
-
             Spacer()
           }
           .padding()
@@ -170,6 +167,15 @@ struct ContentView: View {
         Label("More", systemImage: "ellipsis.circle.fill")
       }
       .tag(3)
+      }
+
+      if selectedTab != 2 {
+        VStack {
+          Spacer()
+          MusicControlButton(isPlaying: musicManager.isPlaying, action: musicManager.toggleAudio)
+            .padding(.bottom, 100)
+        }
+      }
     }
     .navigationViewStyle(.stack)
     .onAppear {
