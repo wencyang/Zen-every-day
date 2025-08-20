@@ -402,6 +402,18 @@ struct ActiveMeditationView: View {
                     .frame(width: 250, height: 250)
                     .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
                 
+                // Breathing halo
+                Circle()
+                    .stroke(Color.white.opacity(0.3), lineWidth: 20)
+                    .frame(width: 280, height: 280)
+                    .scaleEffect(breathPhase ? 0.95 : 1.05)
+                    .blur(radius: 10)
+                    .animation(
+                        .easeInOut(duration: 4)
+                            .repeatForever(autoreverses: true),
+                        value: breathPhase
+                    )
+
                 // Progress circle
                 Circle()
                     .trim(from: 0, to: progress)
@@ -416,23 +428,6 @@ struct ActiveMeditationView: View {
                     .frame(width: 250, height: 250)
                     .rotationEffect(.degrees(-90))
                     .animation(.linear(duration: 1), value: progress)
-                
-                // Breathing circle
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [.blue.opacity(0.3), .clear],
-                            center: .center,
-                            startRadius: 20,
-                            endRadius: breathPhase ? 100 : 80
-                        )
-                    )
-                    .frame(width: 200, height: 200)
-                    .scaleEffect(breathPhase ? 1.1 : 0.9)
-                    .animation(
-                        .easeInOut(duration: 4),
-                        value: breathPhase
-                    )
                 
                 // Time display
                 VStack(spacing: 8) {
