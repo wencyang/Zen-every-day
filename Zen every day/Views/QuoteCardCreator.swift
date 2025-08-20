@@ -173,7 +173,10 @@ struct QuoteCardCreator: View {
 struct QuoteCardRenderer {
   static func render(quote: WisdomQuote, background: UIImage) -> UIImage {
     let size = CGSize(width: 1080, height: 1920)
-    let renderer = UIGraphicsImageRenderer(size: size)
+    let format = UIGraphicsImageRendererFormat()
+    format.scale = UIScreen.main.scale
+    format.opaque = true
+    let renderer = UIGraphicsImageRenderer(size: size, format: format)
     return renderer.image { ctx in
       let rect = CGRect(origin: .zero, size: size)
       background.draw(in: rect)
