@@ -169,7 +169,7 @@ struct ContentView: View {
       .tag(3)
       }
 
-      if selectedTab != 2 {
+      if selectedTab == 0 {
         VStack {
           Spacer()
           MusicControlButton(isPlaying: musicManager.isPlaying, action: musicManager.toggleAudio)

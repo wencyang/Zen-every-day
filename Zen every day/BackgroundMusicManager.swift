@@ -8,6 +8,7 @@ class BackgroundMusicManager: ObservableObject {
     private var audioPlayer: AVAudioPlayer?
     private let audioFiles: [String]
     private var currentAudio: String?
+    private var userPaused: Bool = false
 
     @AppStorage("autoPlayMusic") private var autoPlayMusic: Bool = true
     @AppStorage("musicVolume") private var musicVolume: Double = 0.5
@@ -28,7 +29,7 @@ class BackgroundMusicManager: ObservableObject {
     }
 
     func startIfNeeded() {
-        guard autoPlayMusic else { return }
+        guard autoPlayMusic, !userPaused else { return }
         if audioPlayer == nil {
             playRandomAudio()
         } else if !isPlaying {
@@ -42,12 +43,15 @@ class BackgroundMusicManager: ObservableObject {
             if player.isPlaying {
                 player.pause()
                 isPlaying = false
+                userPaused = true
             } else {
                 player.play()
                 isPlaying = true
+                userPaused = false
             }
         } else {
             playRandomAudio()
+            userPaused = false
         }
     }
 
