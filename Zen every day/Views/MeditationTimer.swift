@@ -37,10 +37,10 @@ class MeditationSession: ObservableObject {
         var fileName: String {
             switch self {
             case .silence: return ""
-            case .rain: return "rain_ambient"
-            case .forest: return "forest_ambient"
-            case .ocean: return "ocean_ambient"
-            case .tibetanBowl: return "tibetan_bowl"
+            case .rain: return "rain"
+            case .forest: return "forest"
+            case .ocean: return "ocean-waves"
+            case .tibetanBowl: return "singing_bowl"
             case .whiteNoise: return "white_noise"
             }
         }
@@ -551,22 +551,25 @@ struct SoundPickerView: View {
                             Image(systemName: sound.systemImage)
                                 .frame(width: 30)
                                 .foregroundStyle(.tint)
-                            
+
                             Text(sound.rawValue)
                                 .foregroundColor(.primary)
-                            
+
                             Spacer()
-                            
+
                             if session.selectedSound == sound {
                                 Image(systemName: "checkmark.circle.fill")
                                     .foregroundStyle(.tint)
                             }
                         }
                         .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                 }
             }
+            .listStyle(.insetGrouped)
             .navigationTitle("Ambient Sound")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
