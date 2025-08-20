@@ -51,6 +51,11 @@ class BackgroundMusicManager: ObservableObject {
         }
     }
 
+    func pause() {
+        audioPlayer?.pause()
+        isPlaying = false
+    }
+
     func updateVolume() {
         audioPlayer?.volume = Float(musicVolume)
     }

@@ -325,7 +325,7 @@ struct MeditationSetupView: View {
             }
             
             Spacer()
-            
+
             // Start button
             Button(action: { session.startMeditation() }) {
                 Label("Start Meditation", systemImage: "play.fill")
@@ -339,20 +339,6 @@ struct MeditationSetupView: View {
                     .foregroundColor(.white)
             }
             .buttonStyle(.plain)
-            
-            // Quick presets
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    ForEach([60, 180, 300, 600, 900], id: \.self) { duration in
-                        Button {
-                            session.duration = TimeInterval(duration)
-                        } label: {
-                            quickPresetLabel(for: TimeInterval(duration))
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-            }
         }
         .padding()
     }
@@ -372,23 +358,6 @@ struct MeditationSetupView: View {
         }
     }
     
-    private func formatDurationShort(_ duration: TimeInterval) -> String {
-        let minutes = Int(duration) / 60
-        return "\(minutes) min"
-    }
-
-    private func quickPresetLabel(for duration: TimeInterval) -> some View {
-        let isSelected = session.duration == duration
-        return Text(formatDurationShort(duration))
-            .font(.footnote.bold())
-            .padding(.horizontal, 12)
-            .padding(.vertical, 6)
-            .background(
-                Capsule()
-                    .fill(isSelected ? Color.accentColor : Color.gray.opacity(0.2))
-            )
-            .foregroundColor(isSelected ? .white : .primary)
-    }
 }
 
 // MARK: - Active Meditation View
