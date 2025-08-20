@@ -210,6 +210,22 @@ struct MeditationRecord: Codable {
     let ambientSound: String
 }
 
+// MARK: - Calming Background
+struct CalmingBackground: View {
+    var body: some View {
+        LinearGradient(
+            colors: [
+                Color.mint.opacity(0.4),
+                Color.blue.opacity(0.3),
+                Color.purple.opacity(0.4)
+            ],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .ignoresSafeArea()
+    }
+}
+
 // MARK: - Main Meditation Timer View
 struct MeditationTimerView: View {
     @StateObject private var session = MeditationSession()
@@ -219,16 +235,7 @@ struct MeditationTimerView: View {
     
     var body: some View {
         ZStack {
-            // Background
-            LinearGradient(
-                colors: [
-                    Color(UIColor.systemBackground),
-                    Color(UIColor.systemBackground).opacity(0.95)
-                ],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
+            CalmingBackground()
             
             if session.isActive {
                 ActiveMeditationView(session: session)
@@ -265,9 +272,9 @@ struct MeditationSetupView: View {
                 Image(systemName: "figure.mind.and.body")
                     .font(.system(size: 50))
                     .foregroundStyle(.tint)
-                
+
                 Text("Meditation Timer")
-                    .font(.largeTitle.bold())
+                    .font(.system(.largeTitle, design: .rounded).bold())
                 
                 Text("Find your inner peace")
                     .font(.subheadline)
@@ -296,6 +303,7 @@ struct MeditationSetupView: View {
                     .background(
                         RoundedRectangle(cornerRadius: 12)
                             .fill(.ultraThinMaterial)
+                            .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
                     )
                 }
                 .buttonStyle(.plain)
@@ -320,6 +328,7 @@ struct MeditationSetupView: View {
                     .background(
                         RoundedRectangle(cornerRadius: 12)
                             .fill(.ultraThinMaterial)
+                            .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 2)
                     )
                 }
                 .buttonStyle(.plain)
@@ -334,10 +343,11 @@ struct MeditationSetupView: View {
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(.tint)
+                        LinearGradient(colors: [.blue, .purple], startPoint: .leading, endPoint: .trailing)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
                     )
                     .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 4)
             }
             .buttonStyle(.plain)
         }
@@ -389,6 +399,7 @@ struct ActiveMeditationView: View {
                 Circle()
                     .stroke(Color.gray.opacity(0.2), lineWidth: 8)
                     .frame(width: 250, height: 250)
+                    .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
                 
                 // Progress circle
                 Circle()
