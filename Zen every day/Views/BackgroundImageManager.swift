@@ -40,13 +40,13 @@ class BackgroundImageManager: ObservableObject {
             }
         }
         self.photoNames = names.isEmpty ? ["photo1"] : names
-        // Load previously selected photo if available
+        // Load previously selected photo if available and ensure it's persisted
         if names.contains(storedPhotoName) {
             self.currentPhotoName = storedPhotoName
         } else {
             self.currentPhotoName = self.photoNames.first ?? "photo1"
-            storedPhotoName = self.currentPhotoName
         }
+        storedPhotoName = self.currentPhotoName
     }
 
     /// Randomize the background photo and persist the chosen image.
