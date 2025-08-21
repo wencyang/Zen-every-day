@@ -77,10 +77,13 @@ struct SavedQuotesView: View {
               }
             }
             .padding()
-            .background(
-              DebugBackgroundImageView(photoName: saved.backgroundPhotoName, quoteText: String(saved.text.prefix(30)))
+            .listRowBackground(
+              DebugBackgroundImageView(
+                photoName: saved.backgroundPhotoName,
+                quoteText: String(saved.text.prefix(30))
+              )
+              .clipShape(RoundedRectangle(cornerRadius: 12))
             )
-            .clipShape(RoundedRectangle(cornerRadius: 12))
             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
             .listRowSeparator(.hidden)
             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
