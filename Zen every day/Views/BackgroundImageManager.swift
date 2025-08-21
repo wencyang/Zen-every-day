@@ -12,10 +12,11 @@ class BackgroundImageManager: ObservableObject {
 
     /// Provides a `UIImage` for the current photo, if available.
     var currentBackgroundImage: UIImage? {
-        if let image = UIImage(named: currentPhotoName) {
+        if let image = UIImage(named: currentPhotoName)?.withRenderingMode(.alwaysOriginal) {
             return image
-        } else if let dataAsset = NSDataAsset(name: currentPhotoName) {
-            return UIImage(data: dataAsset.data)
+        } else if let dataAsset = NSDataAsset(name: currentPhotoName),
+                  let image = UIImage(data: dataAsset.data)?.withRenderingMode(.alwaysOriginal) {
+            return image
         }
         return nil
     }

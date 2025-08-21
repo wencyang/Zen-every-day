@@ -126,7 +126,7 @@ struct DebugBackgroundImageView: View {
     Group {
       if let photoName = photoName, !photoName.isEmpty {
         // Method 1: Try UIImage(named:) - for images in main bundle
-        if let image = UIImage(named: photoName) {
+        if let image = UIImage(named: photoName)?.withRenderingMode(.alwaysOriginal) {
           Image(uiImage: image)
             .resizable()
             .scaledToFill()
@@ -137,7 +137,7 @@ struct DebugBackgroundImageView: View {
         }
         // Method 2: Try NSDataAsset - for images in asset catalog
         else if let dataAsset = NSDataAsset(name: photoName),
-                let image = UIImage(data: dataAsset.data) {
+                let image = UIImage(data: dataAsset.data)?.withRenderingMode(.alwaysOriginal) {
           Image(uiImage: image)
             .resizable()
             .scaledToFill()
@@ -183,7 +183,7 @@ struct DebugBackgroundImageView: View {
         }
       } else {
         // No photo name - try default or show debug info
-        if let defaultImage = UIImage(named: "photo1") {
+        if let defaultImage = UIImage(named: "photo1")?.withRenderingMode(.alwaysOriginal) {
           Image(uiImage: defaultImage)
             .resizable()
             .scaledToFill()
@@ -218,12 +218,12 @@ struct DebugBackgroundImageView: View {
     let fallbackNames = ["photo1", "photo2", "photo3", "photo4", "photo5"]
     
     for name in fallbackNames {
-      if let image = UIImage(named: name) {
+      if let image = UIImage(named: name)?.withRenderingMode(.alwaysOriginal) {
         print("📸 Found fallback image: \(name)")
         return image
       }
       if let dataAsset = NSDataAsset(name: name),
-         let image = UIImage(data: dataAsset.data) {
+         let image = UIImage(data: dataAsset.data)?.withRenderingMode(.alwaysOriginal) {
         print("📸 Found fallback NSDataAsset: \(name)")
         return image
       }
