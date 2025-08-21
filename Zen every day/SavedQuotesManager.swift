@@ -1,5 +1,6 @@
 import Combine
 import SwiftUI
+import UIKit
 
 struct SavedQuote: Codable, Identifiable {
   let id: String
@@ -149,6 +150,14 @@ class SavedQuotesManager: ObservableObject {
     persistSavedQuotes()
   }
 
+  func copySavedQuote(_ savedQuote: SavedQuote) {
+    var copyText = savedQuote.text
+    if let author = savedQuote.author {
+      copyText += "\n- \(author)"
+    }
+    UIPasteboard.general.string = copyText
+  }
+
   func isQuoteSaved(_ quote: WisdomQuote) -> Bool {
     if savedIDs.contains(quote.id) {
       return true
@@ -162,6 +171,27 @@ class SavedQuotesManager: ObservableObject {
       removeQuote(quote)
     } else {
       saveQuote(quote)
+    }
+  }
+
+  func updateMissingBackgrounds() {
+    var updated = false
+    for i in 0..<savedQuotes.count {
+      if savedQuotes[i].backgroundPhotoName == nil || savedQuotes[i].backgroundPhotoName?.isEmpty == true {
+        let newBackground = generateRandomPhotoName()
+        savedQuotes[i] = SavedQuote(
+          id: savedQuotes[i].id,
+          author: savedQuotes[i].author,
+          text: savedQuotes[i].text,
+          work: savedQuotes[i].work,
+          dateSaved: savedQuotes[i].dateSaved,
+          backgroundPhotoName: newBackground
+        )
+        updated = true
+      }
+    }
+    if updated {
+      persistSavedQuotes()
     }
   }
 
@@ -194,5 +224,21 @@ class SavedQuotesManager: ObservableObject {
     let randomName = photoNames.randomElement() ?? "photo1"
     print("Using fallback random background: \(randomName)")
     return randomName
+  }
+
+  private func generateRandomPhotoName() -> String {
+    var names: [String] = []
+    var index = 1
+    while index <= 1000 {
+      let name = "photo\(index)"
+      if UIImage(named: name) != nil || NSDataAsset(name: name) != nil {
+        names.append(name)
+        index += 1
+      } else {
+        break
+      }
+    }
+    let photoNames = names.isEmpty ? ["photo1"] : names
+    return photoNames.randomElement() ?? "photo1"
   }
 }

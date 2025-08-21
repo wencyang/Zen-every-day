@@ -39,7 +39,7 @@ struct SavedQuotesView: View {
       } else {
         List {
           ForEach(savedQuotesManager.savedQuotes.sorted(by: { $0.dateSaved > $1.dateSaved })) { saved in
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 8) {
               Text(saved.text)
                 .font(.system(size: 16))
                 .fixedSize(horizontal: false, vertical: true)
@@ -49,21 +49,43 @@ struct SavedQuotesView: View {
                   .font(.caption)
                   .foregroundColor(.secondary)
               }
+
+              HStack(spacing: 12) {
+                Spacer()
+                Button(action: {
+                  savedQuotesManager.removeSavedQuote(saved)
+                }) {
+                  Image(systemName: "bookmark.slash")
+                    .font(.system(size: 16))
+                    .foregroundColor(.red)
+                }
+                .buttonStyle(PlainButtonStyle())
+
+                Button(action: {
+                  savedQuotesManager.copySavedQuote(saved)
+                  showCopyToast = true
+                }) {
+                  Image(systemName: "doc.on.doc")
+                    .font(.system(size: 16))
+                    .foregroundColor(.blue)
+                }
+                .buttonStyle(PlainButtonStyle())
+              }
             }
-            .padding(.vertical, 8)
+            .padding()
+            .listRowBackground(
+              SavedQuoteBackgroundView(photoName: saved.backgroundPhotoName)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            )
+            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+            .listRowSeparator(.hidden)
             .contextMenu {
               Button {
-                var copyText = saved.text
-                if let author = saved.author {
-                  copyText += "\n- \(author)"
-                }
-                UIPasteboard.general.string = copyText
+                savedQuotesManager.copySavedQuote(saved)
                 showCopyToast = true
               } label: {
                 Label("Copy", systemImage: "doc.on.doc")
               }
-            }
-            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
               Button(role: .destructive) {
                 savedQuotesManager.removeSavedQuote(saved)
               } label: {
@@ -86,5 +108,34 @@ struct SavedQuotesView: View {
       color: .green,
       duration: 1.2
     )
+    .onAppear {
+      savedQuotesManager.updateMissingBackgrounds()
+    }
+  }
+}
+
+struct SavedQuoteBackgroundView: View {
+  let photoName: String?
+
+  var body: some View {
+    Group {
+      if let name = photoName {
+        if let image = UIImage(named: name) {
+          Image(uiImage: image)
+            .resizable()
+            .scaledToFill()
+            .overlay(Color.black.opacity(0.2))
+        } else if let dataAsset = NSDataAsset(name: name), let image = UIImage(data: dataAsset.data) {
+          Image(uiImage: image)
+            .resizable()
+            .scaledToFill()
+            .overlay(Color.black.opacity(0.2))
+        } else {
+          Color(.secondarySystemGroupedBackground)
+        }
+      } else {
+        Color(.secondarySystemGroupedBackground)
+      }
+    }
   }
 }
