@@ -51,7 +51,6 @@ struct SavedQuotesView: View {
               }
 
               HStack(spacing: 8) {
-                Spacer()
                 Button(action: {
                   savedQuotesManager.removeSavedQuote(saved)
                 }) {
@@ -75,7 +74,9 @@ struct SavedQuotesView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
               }
+              .frame(maxWidth: .infinity, alignment: .trailing)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             .listRowBackground(
               DebugBackgroundImageView(
