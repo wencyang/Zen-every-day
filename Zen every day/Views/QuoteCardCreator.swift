@@ -120,13 +120,10 @@ struct QuoteCardCreator: View {
       )
       .onAppear {
         if backgroundImage == nil {
-          if let image = UIImage(named: backgroundManager.currentPhotoName) {
+          if let image = backgroundManager.currentBackgroundImage {
             backgroundImage = image
-          } else if
-            let dataAsset = NSDataAsset(name: backgroundManager.currentPhotoName),
-            let image = UIImage(data: dataAsset.data)
-          {
-            backgroundImage = image
+          } else if let fallback = UIImage(named: "photo1") {
+            backgroundImage = fallback
           }
         }
       }
@@ -158,7 +155,8 @@ struct QuoteCardCreator: View {
   }
 
   private func generateCard(completion: @escaping (UIImage) -> Void) {
-    guard let bgImage = backgroundImage else { return }
+    let bgImage = backgroundImage ?? backgroundManager.currentBackgroundImage ?? UIImage(named: "photo1")
+    guard let bgImage else { return }
     isGenerating = true
     DispatchQueue.global(qos: .userInitiated).async {
       let image = QuoteCardRenderer.render(quote: quote, background: bgImage)
