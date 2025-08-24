@@ -5,7 +5,6 @@ import UIKit
 struct EnhancedQuoteCard: View {
     let quote: WisdomQuote
     @State private var isExpanded = false
-    @State private var showingShareSheet = false
     @State private var showingReflection = false
     @State private var isPressed = false
     @State private var copiedToClipboard = false
@@ -107,7 +106,7 @@ struct EnhancedQuoteCard: View {
                 .opacity(0.3)
             
             // Action buttons
-            HStack(spacing: 0) {
+            HStack(spacing: 30) {
                 // Save/Bookmark button
                 ActionButton(
                     icon: savedQuotesManager.isQuoteSaved(quote) ? "bookmark.fill" : "bookmark",
@@ -117,9 +116,7 @@ struct EnhancedQuoteCard: View {
                         toggleSave()
                     }
                 )
-                
-                Spacer()
-                
+
                 // Reflect button
                 ActionButton(
                     icon: "pencil.and.ellipsis.rectangle",
@@ -129,9 +126,7 @@ struct EnhancedQuoteCard: View {
                         hapticFeedback(.light)
                     }
                 )
-                
-                Spacer()
-                
+
                 // Copy button
                 ActionButton(
                     icon: copiedToClipboard ? "checkmark.circle.fill" : "doc.on.doc",
@@ -140,19 +135,8 @@ struct EnhancedQuoteCard: View {
                         copyToClipboard()
                     }
                 )
-                
-                Spacer()
-                
-                // Share button
-                ActionButton(
-                    icon: "square.and.arrow.up",
-                    color: .blue,
-                    action: {
-                        showingShareSheet = true
-                        hapticFeedback(.light)
-                    }
-                )
             }
+            .frame(maxWidth: .infinity)
         }
         .padding()
         .background(
@@ -176,9 +160,6 @@ struct EnhancedQuoteCard: View {
         )
         .scaleEffect(isPressed ? 0.98 : 1.0)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isPressed)
-        .sheet(isPresented: $showingShareSheet) {
-            ShareSheet(items: [formatQuoteForSharing()])
-        }
         .sheet(isPresented: $showingReflection) {
             QuoteReflectionView(quote: quote)
         }
@@ -209,7 +190,7 @@ struct EnhancedQuoteCard: View {
     }
     
     private func copyToClipboard() {
-        UIPasteboard.general.string = formatQuoteForSharing()
+        UIPasteboard.general.string = formattedQuote()
         
         withAnimation(.easeInOut(duration: 0.3)) {
             copiedToClipboard = true
@@ -225,7 +206,7 @@ struct EnhancedQuoteCard: View {
         }
     }
     
-    private func formatQuoteForSharing() -> String {
+    private func formattedQuote() -> String {
         var text = "\"\(quote.text.cleanQuote.removingParaphrase)\""
         if let author = quote.author {
             text += "\n\n— \(author)"
@@ -233,7 +214,6 @@ struct EnhancedQuoteCard: View {
         if let work = quote.work {
             text += "\n\(work)"
         }
-        text += "\n\nShared from Zen Every Day"
         return text
     }
     
