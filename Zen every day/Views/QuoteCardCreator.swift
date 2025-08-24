@@ -122,7 +122,7 @@ struct QuoteCardCreator: View {
         if backgroundImage == nil {
           if let image = backgroundManager.currentBackgroundImage {
             backgroundImage = image
-          } else if let fallback = UIImage(named: "photo1") {
+          } else if let fallback = UIImage(named: "photo1", in: .main, with: nil) {
             backgroundImage = fallback
           }
         }
@@ -155,7 +155,12 @@ struct QuoteCardCreator: View {
   }
 
   private func generateCard(completion: @escaping (UIImage) -> Void) {
-    let bgImage = backgroundImage ?? backgroundManager.currentBackgroundImage ?? UIImage(named: "photo1")
+    // Ensure the renderer always receives a valid background image from the
+    // app's asset catalog. Loading from `.main` avoids returning an empty
+    // placeholder which previously led to gray cards being saved.
+    let bgImage = backgroundImage ??
+      backgroundManager.currentBackgroundImage ??
+      UIImage(named: "photo1", in: .main, with: nil)
     guard let bgImage else { return }
     isGenerating = true
     DispatchQueue.global(qos: .userInitiated).async {

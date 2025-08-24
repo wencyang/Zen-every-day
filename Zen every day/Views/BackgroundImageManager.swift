@@ -12,9 +12,12 @@ class BackgroundImageManager: ObservableObject {
 
     /// Provides a `UIImage` for the current photo, if available.
     var currentBackgroundImage: UIImage? {
-        if let image = UIImage(named: currentPhotoName) {
+        // Explicitly load assets from the main bundle to ensure resources are
+        // found when rendering quote cards outside of the regular view
+        // hierarchy (e.g. when saving to Photos).
+        if let image = UIImage(named: currentPhotoName, in: .main, with: nil) {
             return image
-        } else if let dataAsset = NSDataAsset(name: currentPhotoName) {
+        } else if let dataAsset = NSDataAsset(name: currentPhotoName, bundle: .main) {
             return UIImage(data: dataAsset.data)
         }
         return nil
@@ -32,7 +35,10 @@ class BackgroundImageManager: ObservableObject {
         var index = 1
         while index <= 1000 {
             let name = "photo\(index)"
-            if UIImage(named: name) != nil || NSDataAsset(name: name) != nil {
+            // Look up images explicitly in the main bundle so that all assets
+            // used for card generation are discovered correctly.
+            if UIImage(named: name, in: .main, with: nil) != nil ||
+                NSDataAsset(name: name, bundle: .main) != nil {
                 names.append(name)
                 index += 1
             } else {
