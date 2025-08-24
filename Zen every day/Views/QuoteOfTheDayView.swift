@@ -163,7 +163,7 @@ struct QuoteHistoryCard: View {
 
           Text(entry.text)
             .font(.system(size: settings.fontSize))
-            .foregroundColor(.primary)
+            .foregroundColor(.white)
             .lineSpacing(4)
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal, 16)
@@ -177,7 +177,7 @@ struct QuoteHistoryCard: View {
         } else {
           Text(entry.text)
             .font(.system(size: 14))
-            .foregroundColor(.secondary)
+            .foregroundColor(.white)
             .lineLimit(2)
             .padding(.horizontal, 16)
             .padding(.bottom, 12)
