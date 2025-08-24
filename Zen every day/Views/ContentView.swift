@@ -10,7 +10,6 @@ struct ContentView: View {
 
   @State private var selectedTab = 0  // 0: Daily Quote, 1: Study, 2: Meditation, 3: More
   @AppStorage("musicVolume") private var musicVolume: Double = 0.5
-  @State private var showQuoteCard = false
 
 
   init() {
@@ -81,26 +80,14 @@ struct ContentView: View {
                       .foregroundColor(.white)
                   }
 
-                  HStack(spacing: 16) {
-                    Button(action: {
-                      savedQuotesManager.toggleQuoteSaved(quote)
-                    }) {
-                      Image(systemName: savedQuotesManager.isQuoteSaved(quote) ? "bookmark.fill" : "bookmark")
-                        .font(.title2)
-                        .foregroundColor(.white)
-                        .padding(8)
-                        .background(Color.black.opacity(0.5).clipShape(Circle()))
-                    }
-
-                    Button(action: {
-                      showQuoteCard = true
-                    }) {
-                      Image(systemName: "square.and.arrow.up")
-                        .font(.title2)
-                        .foregroundColor(.white)
-                        .padding(8)
-                        .background(Color.black.opacity(0.5).clipShape(Circle()))
-                    }
+                  Button(action: {
+                    savedQuotesManager.toggleQuoteSaved(quote)
+                  }) {
+                    Image(systemName: savedQuotesManager.isQuoteSaved(quote) ? "bookmark.fill" : "bookmark")
+                      .font(.title2)
+                      .foregroundColor(.white)
+                      .padding(8)
+                      .background(Color.black.opacity(0.5).clipShape(Circle()))
                   }
                 }
                 .padding(.horizontal)
@@ -193,12 +180,6 @@ struct ContentView: View {
     }
     .onChange(of: musicVolume) { _ , _ in
       musicManager.updateVolume()
-    }
-    .sheet(isPresented: $showQuoteCard) {
-      if let quote = dailyWisdomManager.dailyQuote {
-        QuoteCardCreator(quote: quote)
-          .environmentObject(backgroundManager)
-      }
     }
     .toast(
       isShowing: $savedQuotesManager.showSavedToast,
